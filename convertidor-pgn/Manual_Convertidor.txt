@@ -1,0 +1,276 @@
+📚 MANUAL COMPLETO: CONVERSIÓN DE PGN A FORMATO PARA SERVIDOR
+ÍNDICE
+1.	¿Qué necesitas?
+2.	Estructura de la carpeta convertidor-pgn
+3.	Paso 1: Obtener el archivo PGN original
+4.	Paso 2: Limpiar el PGN con pgn-extract
+5.	Paso 3: Convertir a formato para servidor
+6.	Paso 4: Copiar al servidor.js
+7.	Ejemplo completo paso a paso
+8.	Solución de problemas comunes
+________________________________________
+1️⃣ ¿QUÉ NECESITAS?
+Elemento	Descripción
+Archivo PGN original	El que exportas desde ChessBase, SCID, o cualquier programa de ajedrez
+pgn-extract.exe	Programa que limpia los PGN (elimina comentarios, números, etc.)
+pgn-extract-autoclean.bat	Script que facilita el uso de pgn-extract
+convertidor.html	El archivo HTML que te proporcioné para convertir a formato JSON
+Bloc de notas	Para copiar y pegar el contenido
+________________________________________
+2️⃣ ESTRUCTURA DE LA CARPETA convertidor-pgn
+Tu carpeta debe tener estos archivos:
+text
+D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\convertidor-pgn\
+│
+├── pgn-extract.exe                 ← El programa principal
+├── pgn-extract-autoclean.bat       ← El script para limpiar
+├── convertidor.html                 ← El convertidor a formato JSON
+│
+├── (tus archivos PGN aquí)         ← Los que quieras procesar
+│   ├── problemas_original.pgn
+│   └── problemas_limpio.pgn        ← Se generará al limpiar
+│
+└── (otros archivos temporales)
+________________________________________
+3️⃣ PASO 1: OBTENER EL ARCHIVO PGN ORIGINAL
+Desde ChessBase:
+1.	Abre tu base de datos
+2.	Selecciona las partidas que quieras exportar
+3.	Menú: Archivo → Exportar → Partidas como PGN
+4.	Guarda el archivo en la carpeta convertidor-pgn
+Desde SCID:
+1.	Abre tu base de datos
+2.	Selecciona las partidas
+3.	Menú: File → Export → Games as PGN
+4.	Guarda en la carpeta
+Desde Lichess/Chess.com:
+1.	Abre la partida
+2.	Busca el botón "PGN" o "Descargar PGN"
+3.	Copia el texto y pégalo en el Bloc de notas
+4.	Guarda como mis_problemas.pgn en la carpeta
+Importante: El archivo puede tener muchos problemas juntos, uno tras otro. Eso está bien.
+________________________________________
+4️⃣ PASO 2: LIMPIAR EL PGN CON pgn-extract
+¿Por qué limpiar?
+Los PGN de ChessBase/SCID vienen con:
+•	Comentarios { ... }
+•	Números de movimientos 1., 2.
+•	Variantes ( ... )
+•	Información extra que no necesitamos
+Ejecutar el limpiador:
+1.	Abre una terminal en la carpeta convertidor-pgn:
+text
+cd D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\convertidor-pgn
+2.	Ejecuta el script:
+text
+pgn-extract-autoclean.bat
+3.	Verás esta pantalla:
+text
+========================================
+    LIMPIADOR AUTOMATICO PGN
+========================================
+
+Este script limpiara archivos PGN con las
+opciones: --nocomments --novars --nomovenumbers --noresults
+
+Archivos PGN en esta carpeta:
+----------------------------
+problemas_original.pgn
+mis_partidas.pgn
+
+Nombre del archivo de ENTRADA (ej: original.pgn): 
+4.	Escribe el nombre de tu archivo original:
+text
+problemas_original.pgn
+5.	Escribe el nombre del archivo de salida (o presiona Enter para usar el nombre por defecto):
+text
+problemas_limpio.pgn
+6.	Verás el proceso:
+text
+========================================
+         PROCESANDO ARCHIVO
+========================================
+Entrada:  problemas_original.pgn
+Salida:   problemas_limpio.pgn
+
+Ejecutando pgn-extract...
+7.	Al terminar, verás:
+text
+========================================
+     LIMPIEZA COMPLETADA EXITOSAMENTE
+========================================
+
+Tamanos:
+  Original:  12540 bytes (12 KB)
+  Limpio:    8932 bytes (8 KB)
+  Reduccion: 3608 bytes (28%)
+
+Archivo limpio creado: problemas_limpio.pgn
+________________________________________
+5️⃣ PASO 3: CONVERTIR A FORMATO PARA SERVIDOR
+Abrir el archivo limpio:
+1.	Navega a la carpeta convertidor-pgn
+2.	Haz clic derecho en problemas_limpio.pgn
+3.	Selecciona "Abrir con" → Bloc de notas
+Verás algo como:
+text
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "Mix O"]
+[Black "07"]
+[Result "*"]
+[FEN "1kb3r1/ppb2pq1/2p5/P3pP2/4P3/2P1NP2/1P1B1Q2/R6K b - - 0 1"]
+
+Rh8+ Qh2 Rxh2+ Kxh2
+
+[Event "?"]
+[Site "?"]
+[Date "2019.05.10"]
+[Round "?"]
+[White "Mix O"]
+[Black "11"]
+[Result "*"]
+[FEN "r2r4/4qpkp/5n1p/1p2p2P/p3b3/2P2N2/PPQ1BPP1/2KR3R w - - 0 1"]
+
+Bd3 Bxd3 Rxd3 Rxd3 Qxd3
+Seleccionar y copiar:
+1.	Selecciona TODO el texto (Ctrl+E, Ctrl+C)
+2.	Cierra el Bloc de notas
+Usar el convertidor HTML:
+1.	Haz doble clic en convertidor.html (se abrirá en tu navegador)
+2.	Verás:
+text
+🔄 Convertidor PGN a Formato para Servidor
+
+Pega tus PGN aquí (uno tras otro):
+[Aquí hay un cuadro de texto grande]
+
+[Botón: Convertir a Formato]
+3.	Pega el contenido que copiaste del Bloc de notas (Ctrl+V)
+4.	Haz clic en "Convertir a Formato"
+5.	En la parte inferior aparecerá el resultado:
+text
+Resultado (copia y pega en servidor.js):
+const problemas = [
+    {
+        id: 1,
+        fen: "1kb3r1/ppb2pq1/2p5/P3pP2/4P3/2P1NP2/1P1B1Q2/R6K b - - 0 1",
+        solucion: ["Rh8+", "Qh2", "Rxh2+", "Kxh2"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix O vs 07"
+    },
+    {
+        id: 2,
+        fen: "r2r4/4qpkp/5n1p/1p2p2P/p3b3/2P2N2/PPQ1BPP1/2KR3R w - - 0 1",
+        solucion: ["Bd3", "Bxd3", "Rxd3", "Rxd3", "Qxd3"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix O vs 11"
+    }
+];
+6.	Haz clic en "Copiar al portapapeles"
+________________________________________
+6️⃣ PASO 4: COPIAR AL SERVIDOR.JS
+1.	Abre D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\servidor\servidor.js
+2.	Busca la sección donde está const problemas = [ ... ]; (al principio del archivo)
+3.	Selecciona todo desde const problemas = [ hasta ]; y borra esa sección
+4.	Pega el nuevo contenido que copiaste del convertidor
+5.	Guarda el archivo (Ctrl+S)
+________________________________________
+7️⃣ EJEMPLO COMPLETO PASO A PASO
+Situación:
+Tienes 5 problemas en ChessBase y quieres pasarlos al servidor.
+Paso 1 - Exportar desde ChessBase:
+•	Exportas como entrenamiento.pgn y lo guardas en convertidor-pgn
+Paso 2 - Limpiar:
+text
+C:\Users\Oscar> cd D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\convertidor-pgn
+D:\...\convertidor-pgn> pgn-extract-autoclean.bat
+
+Nombre del archivo de ENTRADA: entrenamiento.pgn
+Nombre del archivo de SALIDA: entrenamiento_limpio.pgn
+Paso 3 - Abrir en Bloc de notas:
+•	Abres entrenamiento_limpio.pgn
+•	Ctrl+E, Ctrl+C (seleccionar todo y copiar)
+Paso 4 - Convertir:
+•	Abres convertidor.html
+•	Pegas el texto (Ctrl+V)
+•	Clic en "Convertir a Formato"
+•	Clic en "Copiar al portapapeles"
+Paso 5 - Pegar en servidor.js:
+•	Abres servidor.js
+•	Reemplazas la sección const problemas = [ ... ];
+•	Guardas
+Paso 6 - ¡Listo!
+•	Reinicias el servidor y los nuevos problemas estarán disponibles
+________________________________________
+8️⃣ SOLUCIÓN DE PROBLEMAS COMUNES
+❌ "pgn-extract.exe no encontrado"
+Solución: Descarga el programa de:
+https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/
+Coloca pgn-extract.exe en la misma carpeta que el script .bat
+❌ "No hay archivos .pgn"
+Solución: Asegúrate de tener archivos con extensión .pgn en la carpeta
+❌ El convertidor HTML no muestra resultados
+Solución:
+•	Asegúrate de que el PGN tenga el formato correcto
+•	Debe tener al menos un [FEN "..."] y una línea con movimientos
+❌ Los movimientos salen mal en el servidor
+Solución:
+•	Revisa que no haya números en los movimientos (1.e4, 2.Nf3)
+•	El limpiador debería haberlos quitado, si no, ejecuta el .bat de nuevo
+❌ Quiero cambiar el objetivo de los problemas
+Solución: En el convertidor HTML, modifica esta línea:
+javascript
+objetivo = "Ejercicio mixto";
+Cámbiala por lo que quieras, por ejemplo:
+javascript
+objetivo = "Mate en 2";
+________________________________________
+📋 RESUMEN VISUAL DEL FLUJO
+text
+┌─────────────────┐
+│ ChessBase/SCID  │
+│ (Exportar PGN)  │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│ Archivo .pgn    │
+│ ORIGINAL        │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│ pgn-extract     │
+│ (Limpiar)       │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│ Archivo .pgn    │
+│ LIMPIO          │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│ Bloc de notas   │
+│ (Copiar todo)   │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│ convertidor.html│
+│ (Pegar y convertir)
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│ servidor.js     │
+│ (Pegar resultado)
+└────────┬────────┘
+         ↓
+    ✅ LISTO
+________________________________________
+🎯 ¡YA ESTÁS LISTO!
+Con este manual puedes:
+1.	Exportar problemas desde cualquier programa de ajedrez
+2.	Limpiarlos automáticamente
+3.	Convertirlos al formato que necesita tu servidor
+4.	Pegarlos y tenerlos funcionando en tu Duelo de Problemas
+

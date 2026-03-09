@@ -1,0 +1,60 @@
+01-DUELO_INDIVIDUAL_X_INTENTOS/
+├── cliente/
+│   ├── imagenes/
+│   │   ├── bb.svg
+│   │   ├── bk.svg
+│   │   ├── bn.svg
+│   │   ├── bp.svg
+│   │   ├── bq.svg
+│   │   ├── br.svg
+│   │   ├── lista.txt
+│   │   ├── lucaschess-master.zip
+│   │   ├── SVG_to_PNG.py
+│   │   ├── wb.svg
+│   │   ├── wk.svg
+│   │   ├── wn.svg
+│   │   ├── wp.svg
+│   │   ├── wq.svg
+│   │   └── wr.svg
+│   ├── app.js
+│   └── index.html
+├── convertidor-pgn/
+│   ├── convertidor.html
+│   ├── Manual_Convertidor.docx
+│   ├── Manual_Convertidor.txt
+│   ├── P1Ext-Mix-ori.pgn
+│   ├── P1Ext-Mix.pgn
+│   ├── P1Ext-Mix_para_server.js.txt
+│   ├── pgn-extract-autoclean.bat
+│   └── pgn-extract.exe
+├── servidor/
+│   ├── node_modules/
+│   │   └── ws/
+│   │       ├── lib/
+│   │       │   ├── buffer-util.js
+│   │       │   ├── constants.js
+│   │       │   ├── event-target.js
+│   │       │   ├── extension.js
+│   │       │   ├── limiter.js
+│   │       │   ├── permessage-deflate.js
+│   │       │   ├── receiver.js
+│   │       │   ├── sender.js
+│   │       │   ├── stream.js
+│   │       │   ├── subprotocol.js
+│   │       │   ├── validation.js
+│   │       │   ├── websocket-server.js
+│   │       │   └── websocket.js
+│   │       ├── browser.js
+│   │       ├── index.js
+│   │       ├── LICENSE
+│   │       ├── package.json
+│   │       ├── README.md
+│   │       └── wrapper.mjs
+│   ├── lista.txt
+│   ├── Orden para correr el servidor.txt
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── problemas.js
+│   ├── runservidor.bat
+│   └── servidor.js
+└── lista.txt

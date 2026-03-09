@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Convertidor PGN a Formato JSON</title>
+    <style>
+        body { font-family: Arial; max-width: 1000px; margin: 20px auto; padding: 20px; }
+        textarea { width: 100%; height: 200px; margin: 10px 0; font-family: monospace; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .output { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🔄 Convertidor PGN a Formato para Servidor</h1>
+    
+    <h3>Pega tus PGN aquí (uno tras otro):</h3>
+    <textarea id="input" placeholder="[Event &quot;?&quot;]
+[Site &quot;?&quot;]
+[Date &quot;????.??.??&quot;]
+[Round &quot;?&quot;]
+[White &quot;Mix O&quot;]
+[Black &quot;07&quot;]
+[Result &quot;*&quot;]
+[Annotator &quot;Oscar&quot;]
+[SetUp &quot;1&quot;]
+[FEN &quot;1kb3r1/ppb2pq1/2p5/P3pP2/4P3/2P1NP2/1P1B1Q2/R6K b - - 0 1&quot;]
+[PlyCount &quot;4&quot;]
+[WhiteFideId &quot;-1&quot;]
+[BlackFideId &quot;-1&quot;]
+[GameId &quot;2284847552484966&quot;]
+
+Rh8+ Qh2 Rxh2+ Kxh2
+
+[Event &quot;?&quot;]
+[Site &quot;?&quot;]
+[Date &quot;2019.05.10&quot;]
+[Round &quot;?&quot;]
+[White &quot;Mix O&quot;]
+[Black &quot;11&quot;]
+[Result &quot;*&quot;]
+[Annotator &quot;Oscar&quot;]
+[EventDate &quot;2019.??.??&quot;]
+[SetUp &quot;1&quot;]
+[FEN &quot;r2r4/4qpkp/5n1p/1p2p2P/p3b3/2P2N2/PPQ1BPP1/2KR3R w - - 0 1&quot;]
+[PlyCount &quot;5&quot;]
+[WhiteFideId &quot;-1&quot;]
+[BlackFideId &quot;-1&quot;]
+[GameId &quot;2284847552489066&quot;]
+
+Bd3 Bxd3 Rxd3 Rxd3 Qxd3"></textarea>
+    
+    <button onclick="convertir()">Convertir a Formato</button>
+    
+    <div class="output">
+        <h3>Resultado (copia y pega en servidor.js):</h3>
+        <pre id="output">// Aquí aparecerá el resultado</pre>
+        <button onclick="copiar()">Copiar al portapapeles</button>
+    </div>
+
+    <script>
+        function convertir() {
+            const texto = document.getElementById('input').value;
+            const problemas = [];
+            
+            // Separar por "[Event " que es el inicio de cada problema
+            const bloques = texto.split('[Event "').filter(b => b.trim() !== '');
+            
+            for (let i = 0; i < bloques.length; i++) {
+                const bloque = '[Event "' + bloques[i];
+                const lineas = bloque.split('\n');
+                
+                let fen = '';
+                let solucion = [];
+                let white = '';
+                let black = '';
+                
+                // Extraer información
+                for (let linea of lineas) {
+                    linea = linea.trim();
+                    
+                    if (linea.startsWith('[FEN "')) {
+                        fen = linea.replace('[FEN "', '').replace('"]', '').trim();
+                    }
+                    else if (linea.startsWith('[White "')) {
+                        white = linea.replace('[White "', '').replace('"]', '').trim();
+                    }
+                    else if (linea.startsWith('[Black "')) {
+                        black = linea.replace('[Black "', '').replace('"]', '').trim();
+                    }
+                    else if (!linea.startsWith('[') && linea.length > 0 && !linea.includes('GameId')) {
+                        // Esta línea contiene los movimientos
+                        solucion = linea.split(/\s+/);
+                    }
+                }
+                
+                // Determinar objetivo
+                let objetivo = 'Ejercicio mixto';
+                if (white.includes('Mate') || black.includes('Mate')) {
+                    objetivo = 'Problema de mate';
+                } else if (white.includes('Ganar')) {
+                    objetivo = 'Ganar material';
+                }
+                
+                if (fen && solucion.length > 0) {
+                    problemas.push({
+                        id: i + 1,
+                        fen: fen,
+                        solucion: solucion,
+                        objetivo: objetivo,
+                        descripcion: `${white} vs ${black}`
+                    });
+                }
+            }
+            
+            // Generar el texto en el formato correcto
+            let resultado = 'const problemas = [\n';
+            
+            problemas.forEach(p => {
+                resultado += `    {\n`;
+                resultado += `        id: ${p.id},\n`;
+                resultado += `        fen: "${p.fen}",\n`;
+                resultado += `        solucion: [${p.solucion.map(s => `"${s}"`).join(', ')}],\n`;
+                resultado += `        objetivo: "${p.objetivo}",\n`;
+                resultado += `        descripcion: "${p.descripcion}"\n`;
+                resultado += `    },\n`;
+            });
+            
+            resultado += '];\n';
+            
+            document.getElementById('output').textContent = resultado;
+        }
+        
+        function copiar() {
+            const output = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(output).then(() => {
+                alert('¡Copiado al portapapeles!');
+            });
+        }
+    </script>
+</body>
+</html>

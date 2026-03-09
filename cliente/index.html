@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 DUELO DE PROBLEMAS - PRÁCTICA</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif;
+            background: #1a2a3a;
+            padding: 10px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ecf0f1;
+            border-radius: 20px;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .modo-badge {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .conexion {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .conectado { color: #27ae60; font-weight: bold; }
+        .desconectado { color: #e74c3c; font-weight: bold; }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 120px;
+        }
+        
+        button:hover { background: #2980b9; }
+        button:disabled { background: #bdc3c7; cursor: not-allowed; }
+        
+        .registro {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .registro input {
+            padding: 10px;
+            width: 300px;
+            margin: 0 10px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+        }
+        
+        .juego-panel {
+            display: none;
+        }
+        
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .badge {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .badge-fallos {
+            background: #e74c3c;
+        }
+        
+        .badge-aciertos {
+            background: #27ae60;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tablero-container {
+            flex: 2;
+            min-width: 500px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        /* ============================================ */
+        /* TABLERO CON COORDENADAS COMPLETAS            */
+        /* ============================================ */
+        .tablero-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .coordenadas-superiores {
+            display: flex;
+            width: 100%;
+            margin-bottom: 5px;
+            padding-left: 30px; /* Espacio para coordenadas izquierdas */
+        }
+        
+        .coordenada-superior {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 1.1em;
+        }
+        
+        .tablero-con-coordenadas {
+            display: flex;
+            width: 100%;
+        }
+        
+        .coordenadas-izquierdas {
+            display: flex;
+            flex-direction: column;
+            width: 30px;
+            justify-content: space-around;
+            margin-right: 5px;
+        }
+        
+        .coordenada-izquierda {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 1.1em;
+        }
+        
+        #tablero {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            border: 4px solid #8b4513;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+        
+        .coordenadas-inferiores {
+            display: flex;
+            width: 100%;
+            margin-top: 5px;
+            padding-left: 30px; /* Espacio para coordenadas izquierdas */
+        }
+        
+        .coordenada-inferior {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 1.1em;
+        }
+        
+        .coordenadas-derechas {
+            display: flex;
+            flex-direction: column;
+            width: 30px;
+            justify-content: space-around;
+            margin-left: 5px;
+        }
+        
+        .coordenada-derecha {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 1.1em;
+        }
+        /* ============================================ */
+        
+        .casilla {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .casilla img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 5px;
+            pointer-events: auto;
+        }
+        
+        .casilla.blanca { background: #f0d9b5; }
+        .casilla.negra { background: #b58863; }
+        
+        .panel-derecho {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .info-problema {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        /* ============================================ */
+        /* TURNO AHORA ESTÁ AQUÍ - DEBAJO DE PROBLEMA  */
+        /* ============================================ */
+        .turno-indicador {
+            background: #f39c12;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            margin-top: 10px;
+        }
+        /* ============================================ */
+        
+        .contador-fallos {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .progreso-fallos {
+            width: 100%;
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .barra-fallos {
+            height: 100%;
+            background: #e74c3c;
+            transition: width 0.3s;
+        }
+        
+        .chat {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #mensajes {
+            flex: 1;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .mensaje {
+            padding: 5px 10px;
+            margin: 5px 0;
+            background: #e9ecef;
+            border-radius: 10px;
+        }
+        
+        .mensaje.sistema {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .ranking {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+        }
+        
+        .ranking-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .botones-panel {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-practica {
+            background: #27ae60;
+            flex: 2;
+        }
+        
+        .btn-practica:hover {
+            background: #229954;
+        }
+        
+        .btn-finalizar {
+            background: #e74c3c;
+            flex: 1;
+        }
+        
+        .btn-finalizar:hover {
+            background: #c0392b;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content { flex-direction: column; }
+            .tablero-container { min-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>♜ DUELO DE PROBLEMAS ♞</h1>
+        <div id="modoInfo" class="modo-badge">🎯 MODO PRÁCTICA</div>
+        
+        <div class="conexion">
+            <span>Estado: <span id="estado" class="desconectado">Desconectado</span></span>
+            <button id="btnConectar">Conectar</button>
+            <button id="btnDesconectar" disabled>Desconectar</button>
+        </div>
+        
+        <div id="registro" class="registro">
+            <h3>Registro</h3>
+            <input type="text" id="nombreInput" placeholder="Tu nombre" value="Jugador">
+            <button id="btnRegistrar">Registrarse</button>
+        </div>
+        
+        <div id="juegoPanel" class="juego-panel">
+            <div class="header-info">
+                <div><strong>ID:</strong> <span id="miId">-</span></div>
+                <div><strong>Nombre:</strong> <span id="miNombre">-</span></div>
+                <div><span class="badge">Puntos: <span id="puntuacion">0</span></span></div>
+                <div><span class="badge badge-aciertos">✓ <span id="aciertos">0</span></span></div>
+                <div><span class="badge badge-fallos">✗ <span id="fallos">0</span>/<span id="fallosMaximos">3</span></span></div>
+            </div>
+            
+            <div class="main-content">
+                <div class="tablero-container">
+                    <!-- TABLERO CON COORDENADAS COMPLETAS -->
+                    <div class="tablero-wrapper">
+                        <!-- Coordenadas superiores (a-h) -->
+                        <div class="coordenadas-superiores" id="coordsSuperiores">
+                            <div class="coordenada-superior">a</div>
+                            <div class="coordenada-superior">b</div>
+                            <div class="coordenada-superior">c</div>
+                            <div class="coordenada-superior">d</div>
+                            <div class="coordenada-superior">e</div>
+                            <div class="coordenada-superior">f</div>
+                            <div class="coordenada-superior">g</div>
+                            <div class="coordenada-superior">h</div>
+                        </div>
+                        
+                        <div class="tablero-con-coordenadas">
+                            <!-- Coordenadas izquierdas (8-1) -->
+                            <div class="coordenadas-izquierdas" id="coordsIzquierdas">
+                                <div class="coordenada-izquierda">8</div>
+                                <div class="coordenada-izquierda">7</div>
+                                <div class="coordenada-izquierda">6</div>
+                                <div class="coordenada-izquierda">5</div>
+                                <div class="coordenada-izquierda">4</div>
+                                <div class="coordenada-izquierda">3</div>
+                                <div class="coordenada-izquierda">2</div>
+                                <div class="coordenada-izquierda">1</div>
+                            </div>
+                            
+                            <!-- Tablero -->
+                            <div id="tablero"></div>
+                            
+                            <!-- Coordenadas derechas (8-1) -->
+                            <div class="coordenadas-derechas" id="coordsDerechas">
+                                <div class="coordenada-derecha">8</div>
+                                <div class="coordenada-derecha">7</div>
+                                <div class="coordenada-derecha">6</div>
+                                <div class="coordenada-derecha">5</div>
+                                <div class="coordenada-derecha">4</div>
+                                <div class="coordenada-derecha">3</div>
+                                <div class="coordenada-derecha">2</div>
+                                <div class="coordenada-derecha">1</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Coordenadas inferiores (a-h) -->
+                        <div class="coordenadas-inferiores" id="coordsInferiores">
+                            <div class="coordenada-inferior">a</div>
+                            <div class="coordenada-inferior">b</div>
+                            <div class="coordenada-inferior">c</div>
+                            <div class="coordenada-inferior">d</div>
+                            <div class="coordenada-inferior">e</div>
+                            <div class="coordenada-inferior">f</div>
+                            <div class="coordenada-inferior">g</div>
+                            <div class="coordenada-inferior">h</div>
+                        </div>
+                    </div>
+                    
+                    <div class="botones-panel">
+                        <button id="btnIniciarPractica" class="btn-practica">Iniciar Práctica</button>
+                        <button id="btnFinalizar" class="btn-finalizar">Finalizar</button>
+                    </div>
+                </div>
+                
+                <div class="panel-derecho">
+                    <div class="info-problema">
+                        <h3>Problema</h3>
+                        <p id="problemaDesc">Esperando...</p>
+                        
+                        <!-- TURNO AHORA VA AQUÍ (debajo de problema) -->
+                        <div id="turnoDisplay" class="turno-indicador">⚪ Juegan blancas</div>
+                    </div>
+                    
+                    <div class="contador-fallos">
+                        <h4>Fallos permitidos</h4>
+                        <div class="progreso-fallos">
+                            <div id="barraFallos" class="barra-fallos" style="width: 0%"></div>
+                        </div>
+                        <span id="fallosDisplay">0/3</span>
+                    </div>
+                    
+                    <div class="chat">
+                        <h3>Eventos</h3>
+                        <div id="mensajes"></div>
+                    </div>
+                    
+                    <div id="ranking" class="ranking">
+                        <h3>Ranking</h3>
+                        <div id="listaJugadores"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

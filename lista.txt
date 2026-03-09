@@ -1,0 +1,114 @@
+ El volumen de la unidad D es New Volume
+ El n£mero de serie del volumen es: 3813-E48D
+
+ Directorio de D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\01-DUELO_INDIVIDUAL_X_INTENTOS
+
+08/03/2026  11:44p.ÿm.    <DIR>          .
+07/03/2026  12:43p.ÿm.    <DIR>          ..
+07/03/2026  12:39a.ÿm.    <DIR>          cliente
+06/03/2026  11:17p.ÿm.    <DIR>          convertidor-pgn
+08/03/2026  11:44p.ÿm.                 0 lista.txt
+07/03/2026  12:27a.ÿm.    <DIR>          servidor
+               1 archivos              0 bytes
+
+ Directorio de D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\01-DUELO_INDIVIDUAL_X_INTENTOS\cliente
+
+07/03/2026  12:39a.ÿm.    <DIR>          .
+08/03/2026  11:44p.ÿm.    <DIR>          ..
+07/03/2026  12:27a.ÿm.            19.201 app.js
+06/03/2026  11:15p.ÿm.    <DIR>          imagenes
+07/03/2026  12:39a.ÿm.            15.893 index.html
+               2 archivos         35.094 bytes
+
+ Directorio de D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\01-DUELO_INDIVIDUAL_X_INTENTOS\cliente\imagenes
+
+06/03/2026  11:15p.ÿm.    <DIR>          .
+07/03/2026  12:39a.ÿm.    <DIR>          ..
+06/03/2026  12:54p.ÿm.             2.756 bb.svg
+06/03/2026  12:54p.ÿm.             4.143 bk.svg
+06/03/2026  12:54p.ÿm.             2.659 bn.svg
+06/03/2026  12:54p.ÿm.               690 bp.svg
+06/03/2026  12:54p.ÿm.             3.171 bq.svg
+06/03/2026  12:54p.ÿm.             3.408 br.svg
+06/03/2026  01:12p.ÿm.                96 lista.txt
+06/03/2026  12:54p.ÿm.       111.042.399 lucaschess-master.zip
+21/12/2025  12:53p.ÿm.            19.710 SVG_to_PNG.py
+06/03/2026  12:54p.ÿm.             1.587 wb.svg
+06/03/2026  12:54p.ÿm.             1.395 wk.svg
+06/03/2026  12:54p.ÿm.             1.430 wn.svg
+06/03/2026  12:54p.ÿm.               995 wp.svg
+06/03/2026  12:54p.ÿm.             2.088 wq.svg
+06/03/2026  12:54p.ÿm.             1.273 wr.svg
+              15 archivos    111.087.800 bytes
+
+ Directorio de D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\01-DUELO_INDIVIDUAL_X_INTENTOS\convertidor-pgn
+
+06/03/2026  11:17p.ÿm.    <DIR>          .
+08/03/2026  11:44p.ÿm.    <DIR>          ..
+06/03/2026  08:39p.ÿm.             5.289 convertidor.html
+06/03/2026  08:54p.ÿm.            30.654 Manual_Convertidor.docx
+06/03/2026  08:56p.ÿm.             9.735 Manual_Convertidor.txt
+02/12/2025  09:02p.ÿm.            82.149 P1Ext-Mix-ori.pgn
+06/03/2026  11:17p.ÿm.            71.821 P1Ext-Mix.pgn
+06/03/2026  11:19p.ÿm.            55.352 P1Ext-Mix_para_server.js.txt
+06/02/2026  11:38a.ÿm.             2.401 pgn-extract-autoclean.bat
+02/12/2025  09:22p.ÿm.         2.442.579 pgn-extract.exe
+               8 archivos      2.699.980 bytes
+
+ Directorio de D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\01-DUELO_INDIVIDUAL_X_INTENTOS\servidor
+
+07/03/2026  12:27a.ÿm.    <DIR>          .
+08/03/2026  11:44p.ÿm.    <DIR>          ..
+06/03/2026  08:44a.ÿm.             3.086 lista.txt
+06/03/2026  11:14p.ÿm.    <DIR>          node_modules
+06/03/2026  04:54p.ÿm.                16 Orden para correr el servidor.txt
+06/03/2026  09:20a.ÿm.               847 package-lock.json
+06/03/2026  06:57p.ÿm.                91 package.json
+06/03/2026  06:50p.ÿm.             3.689 problemas.js
+06/03/2026  04:54p.ÿm.                16 runservidor.bat
+07/03/2026  12:29a.ÿm.            68.958 servidor.js
+               7 archivos         76.703 bytes
+
+ Directorio de D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\01-DUELO_INDIVIDUAL_X_INTENTOS\servidor\node_modules
+
+06/03/2026  11:14p.ÿm.    <DIR>          .
+07/03/2026  12:27a.ÿm.    <DIR>          ..
+06/03/2026  09:20a.ÿm.               714 .package-lock.json
+06/03/2026  11:15p.ÿm.    <DIR>          ws
+               1 archivos            714 bytes
+
+ Directorio de D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\01-DUELO_INDIVIDUAL_X_INTENTOS\servidor\node_modules\ws
+
+06/03/2026  11:15p.ÿm.    <DIR>          .
+06/03/2026  11:14p.ÿm.    <DIR>          ..
+18/02/2026  09:35p.ÿm.               176 browser.js
+18/02/2026  09:35p.ÿm.               376 index.js
+06/03/2026  11:15p.ÿm.    <DIR>          lib
+18/02/2026  09:35p.ÿm.             1.183 LICENSE
+18/02/2026  09:35p.ÿm.             1.723 package.json
+18/02/2026  09:35p.ÿm.            15.306 README.md
+18/02/2026  09:35p.ÿm.               341 wrapper.mjs
+               6 archivos         19.105 bytes
+
+ Directorio de D:\Users\Oscar\Downloads\Ajedrez\-\PROYECTOS\CHESSCUP-CLONE\03-DUELO_DE_PROBLEMAS\01-DUELO_INDIVIDUAL_X_INTENTOS\servidor\node_modules\ws\lib
+
+06/03/2026  11:15p.ÿm.    <DIR>          .
+06/03/2026  11:15p.ÿm.    <DIR>          ..
+18/02/2026  09:35p.ÿm.             3.056 buffer-util.js
+18/02/2026  09:35p.ÿm.               503 constants.js
+18/02/2026  09:35p.ÿm.             7.321 event-target.js
+18/02/2026  09:35p.ÿm.             6.183 extension.js
+18/02/2026  09:35p.ÿm.             1.034 limiter.js
+18/02/2026  09:35p.ÿm.            14.510 permessage-deflate.js
+18/02/2026  09:35p.ÿm.            16.460 receiver.js
+18/02/2026  09:35p.ÿm.            16.711 sender.js
+18/02/2026  09:35p.ÿm.             4.204 stream.js
+18/02/2026  09:35p.ÿm.             1.498 subprotocol.js
+18/02/2026  09:35p.ÿm.             3.903 validation.js
+18/02/2026  09:35p.ÿm.            16.616 websocket-server.js
+18/02/2026  09:35p.ÿm.            36.740 websocket.js
+              13 archivos        128.739 bytes
+
+     Total de archivos en la lista:
+              53 archivos    114.048.135 bytes
+              23 dirs  92.784.558.080 bytes libres
