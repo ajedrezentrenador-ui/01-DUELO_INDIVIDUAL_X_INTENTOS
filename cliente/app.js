@@ -62,11 +62,6 @@ function dibujarTablero() {
             casilla.dataset.fila = fila;
             casilla.dataset.columna = columna;
             
-            // Coordenada para mostrar dentro de la casilla
-            const letra = String.fromCharCode(97 + columna);
-            const numero = 8 - fila;
-            casilla.dataset.coordenada = `${letra}${numero}`;
-            
             if (pieza) {
                 const img = document.createElement('img');
                 img.src = obtenerURLPieza(pieza);
@@ -286,7 +281,7 @@ function manejarClick(e) {
     if (!piezaSeleccionada && pieza && pieza.color === chess.turn()) {
         piezaSeleccionada = { fila, columna };
         resaltarCasilla(fila, columna);
-        agregarMensaje(`🟡 Pieza seleccionada en ${casilla.dataset.coordenada}`, 'sistema');
+        agregarMensaje(`🟡 Pieza seleccionada`, 'sistema');
         return;
     }
     
@@ -523,7 +518,7 @@ function mostrarEstadisticasPractica(estadisticas) {
     const html = `
         <div style="text-align: center;">
             <h3>📊 ESTADÍSTICAS DE LA PRÁCTICA</h3>
-            <p>${mensaje}</p>
+            <p style="font-size: 1.2em; font-weight: bold; color: #2c3e50;">${mensaje}</p>
             <hr>
             <table style="width: 100%; margin: 15px 0; border-collapse: collapse;">
                 <tr>
