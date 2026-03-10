@@ -22,7 +22,7 @@ const puntuacionSpan = document.getElementById('puntuacion');
 const aciertosSpan = document.getElementById('aciertos');
 const fallosSpan = document.getElementById('fallos');
 const fallosMaximosSpan = document.getElementById('fallosMaximos');
-const turnoPrincipal = document.getElementById('turnoPrincipal'); // Turno arriba
+const turnoPrincipal = document.getElementById('turnoPrincipal');
 const problemaDescSpan = document.getElementById('problemaDesc');
 const mensajesDiv = document.getElementById('mensajes');
 const barraFallos = document.getElementById('barraFallos');
@@ -52,7 +52,6 @@ function dibujarTablero() {
     
     for (let i = 0; i < 8; i++) {
         const fila = rotado ? 7 - i : i;
-        const numeroFila = 8 - fila; // Número real de la fila (1-8)
         
         for (let j = 0; j < 8; j++) {
             const columna = rotado ? 7 - j : j;
@@ -62,7 +61,6 @@ function dibujarTablero() {
             casilla.className = `casilla ${(fila + columna) % 2 === 0 ? 'blanca' : 'negra'}`;
             casilla.dataset.fila = fila;
             casilla.dataset.columna = columna;
-            casilla.dataset.filaNum = numeroFila; // Para mostrar el número
             
             if (pieza) {
                 const img = document.createElement('img');
@@ -99,7 +97,7 @@ function dibujarTablero() {
     actualizarTurno();
 }
 
-// Actualizar indicador de turno (ahora en turnoPrincipal)
+// Actualizar indicador de turno (arriba del tablero)
 function actualizarTurno() {
     const turno = chess.turn();
     if (turno === 'w') {
@@ -344,7 +342,7 @@ function quitarResaltado() {
     });
 }
 
-// Conexión WebSocket (el resto del código sigue igual)
+// Conexión WebSocket
 btnConectar.onclick = () => {
     const wsUrl = window.location.hostname === 'localhost' 
         ? 'ws://localhost:8080' 
