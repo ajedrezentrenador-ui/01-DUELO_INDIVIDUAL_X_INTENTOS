@@ -9,13 +9,13 @@
             margin: 0; 
             padding: 0; 
             box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; /* Quita el resaltado al tocar en móvil */
+            -webkit-tap-highlight-color: transparent;
         }
         
         body { 
             font-family: 'Segoe UI', sans-serif;
             background: #1a2a3a;
-            padding: 8px;
+            padding: 5px;
             min-height: 100vh;
         }
         
@@ -24,81 +24,76 @@
             margin: 0 auto;
             background: #ecf0f1;
             border-radius: 20px;
-            padding: 15px;
+            padding: 12px;
         }
         
         h1 {
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: clamp(1.5rem, 5vw, 2rem); /* Tamaño responsive */
+            margin-bottom: 10px;
+            font-size: clamp(1.3rem, 4vw, 2rem);
         }
         
         .modo-badge {
             text-align: center;
-            font-size: 1.1em;
-            margin-bottom: 10px;
+            font-size: 1rem;
+            margin-bottom: 8px;
             color: #27ae60;
             font-weight: bold;
         }
         
         .conexion {
             text-align: center;
-            margin-bottom: 15px;
-            padding: 12px;
+            margin-bottom: 12px;
+            padding: 10px;
             background: #fff;
             border-radius: 40px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .conectado { color: #27ae60; font-weight: bold; }
         .desconectado { color: #e74c3c; font-weight: bold; }
         
         button {
-            padding: 12px 20px;
+            padding: 10px 16px;
             border: none;
             border-radius: 30px;
             background: #3498db;
             color: white;
             font-weight: bold;
             cursor: pointer;
-            min-width: 100px;
-            font-size: 16px; /* Tamaño mínimo para evitar zoom en iOS */
+            min-width: 90px;
+            font-size: 15px;
             transition: opacity 0.2s;
-            -webkit-appearance: none; /* Quita estilo por defecto en iOS */
-        }
-        
-        button:hover { 
-            opacity: 0.9; 
+            -webkit-appearance: none;
         }
         
         button:active {
-            transform: scale(0.98); /* Efecto al tocar */
+            transform: scale(0.97);
         }
         
         button:disabled { 
             background: #bdc3c7; 
             cursor: not-allowed;
-            opacity: 0.7;
         }
         
         .registro {
             background: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
             display: none;
         }
         
         .registro input {
-            padding: 15px;
+            padding: 12px;
             width: 100%;
-            max-width: 300px;
-            margin: 10px 0;
+            max-width: 280px;
+            margin: 8px 0;
             border: 2px solid #3498db;
             border-radius: 30px;
             font-size: 16px;
@@ -112,47 +107,43 @@
             display: flex;
             justify-content: space-between;
             background: #fff;
-            padding: 12px;
-            border-radius: 15px;
-            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
-            gap: 8px;
-            font-size: 14px;
+            gap: 6px;
+            font-size: 13px;
         }
         
         .badge {
             background: #3498db;
             color: white;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 25px;
             font-weight: bold;
             display: inline-block;
+            font-size: 12px;
         }
         
-        .badge-fallos {
-            background: #e74c3c;
-        }
-        
-        .badge-aciertos {
-            background: #27ae60;
-        }
+        .badge-fallos { background: #e74c3c; }
+        .badge-aciertos { background: #27ae60; }
         
         .main-content {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
         }
         
         .tablero-container {
             flex: 2;
-            min-width: 300px;
+            min-width: 280px;
             background: #fff;
-            padding: 15px;
+            padding: 12px;
             border-radius: 15px;
         }
         
         /* ============================================ */
-        /* TABLERO CON COORDENADAS - VERSIÓN MÓVIL      */
+        /* TABLERO COMPACTO - COORDENADAS DENTRO        */
         /* ============================================ */
         .tablero-wrapper {
             display: flex;
@@ -161,57 +152,7 @@
             width: 100%;
         }
         
-        .coordenadas-superiores,
-        .coordenadas-inferiores {
-            display: flex;
-            width: 100%;
-            padding-left: 25px; /* Espacio para coordenadas izquierdas */
-            font-size: clamp(12px, 3vw, 16px);
-            font-weight: bold;
-            color: #8b4513;
-        }
-        
-        .tablero-con-coordenadas {
-            display: flex;
-            width: 100%;
-        }
-        
-        .coordenadas-izquierdas,
-        .coordenadas-derechas {
-            display: flex;
-            flex-direction: column;
-            width: 25px;
-            justify-content: space-around;
-            font-size: clamp(12px, 3vw, 16px);
-            font-weight: bold;
-            color: #8b4513;
-            text-align: center;
-        }
-        
-        .coordenadas-izquierdas {
-            margin-right: 5px;
-        }
-        
-        .coordenadas-derechas {
-            margin-left: 5px;
-        }
-        
-        .coordenada-superior,
-        .coordenada-inferior {
-            flex: 1;
-            text-align: center;
-        }
-        
-        .coordenada-izquierda,
-        .coordenada-derecha {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
         #tablero {
-            flex: 1;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             border: 3px solid #8b4513;
@@ -219,8 +160,9 @@
             overflow: hidden;
             aspect-ratio: 1;
             width: 100%;
-            max-width: 500px;
+            max-width: min(500px, 85vw);
             margin: 0 auto;
+            position: relative;
         }
         
         .casilla {
@@ -230,73 +172,87 @@
             justify-content: center;
             cursor: pointer;
             position: relative;
-            -webkit-tap-highlight-color: transparent;
         }
         
         .casilla img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 3px;
+            padding: 2px;
             pointer-events: auto;
-            max-width: 100%;
+            z-index: 2;
         }
         
         .casilla.blanca { background: #f0d9b5; }
         .casilla.negra { background: #b58863; }
         
-        .casilla:active {
-            opacity: 0.8;
+        /* Coordenadas DENTRO de las casillas */
+        .casilla::after {
+            content: attr(data-coordenada);
+            position: absolute;
+            bottom: 1px;
+            right: 2px;
+            font-size: 9px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            z-index: 1;
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Para casillas oscuras, texto más claro */
+        .casilla.negra::after {
+            color: rgba(255, 255, 255, 0.5);
         }
         
         .panel-derecho {
             flex: 1;
-            min-width: 250px;
+            min-width: 240px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
         
         .info-problema {
             background: #fff;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 12px;
+            border-radius: 12px;
         }
         
         .info-problema h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 16px;
+            margin-bottom: 6px;
         }
         
         .info-problema p {
-            font-size: 15px;
-            line-height: 1.4;
+            font-size: 14px;
+            line-height: 1.3;
         }
         
         .turno-indicador {
             background: #f39c12;
             color: white;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1rem;
             text-align: center;
-            margin-top: 12px;
+            margin-top: 10px;
         }
         
         .contador-fallos {
             background: #fff;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 12px;
+            border-radius: 12px;
             text-align: center;
         }
         
         .progreso-fallos {
             width: 100%;
-            height: 25px;
+            height: 20px;
             background: #ecf0f1;
-            border-radius: 15px;
-            margin: 12px 0;
+            border-radius: 10px;
+            margin: 8px 0;
             overflow: hidden;
         }
         
@@ -308,9 +264,9 @@
         
         .chat {
             background: #fff;
-            padding: 15px;
-            border-radius: 15px;
-            height: 250px;
+            padding: 12px;
+            border-radius: 12px;
+            height: 200px;
             display: flex;
             flex-direction: column;
         }
@@ -319,18 +275,18 @@
             flex: 1;
             overflow-y: auto;
             background: #f8f9fa;
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            -webkit-overflow-scrolling: touch;
         }
         
         .mensaje {
-            padding: 8px 12px;
-            margin: 5px 0;
+            padding: 6px 10px;
+            margin: 4px 0;
             background: #e9ecef;
-            border-radius: 18px;
+            border-radius: 15px;
             word-wrap: break-word;
         }
         
@@ -341,127 +297,83 @@
         
         .ranking {
             background: #fff;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 12px;
+            border-radius: 12px;
             display: none;
         }
         
         .ranking h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
+            font-size: 16px;
+            margin-bottom: 8px;
         }
         
         .ranking-row {
             display: flex;
             justify-content: space-between;
-            padding: 10px 8px;
+            padding: 8px 6px;
             border-bottom: 1px solid #ddd;
-            font-size: 15px;
+            font-size: 14px;
         }
         
         .botones-panel {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 8px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
         
         .btn-practica {
             background: #27ae60;
             flex: 2;
-            min-width: 150px;
+            min-width: 130px;
         }
         
         .btn-finalizar {
             background: #e74c3c;
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
         }
         
         /* ============================================ */
-        /* MEDIA QUERIES - AJUSTES PARA MÓVIL           */
+        /* MEDIA QUERIES - MÓVIL                        */
         /* ============================================ */
         @media (max-width: 768px) {
             body {
-                padding: 5px;
+                padding: 3px;
             }
             
             .container {
-                padding: 12px;
+                padding: 8px;
             }
             
             h1 {
-                font-size: 1.8rem;
-                margin-bottom: 12px;
-            }
-            
-            .conexion {
-                padding: 10px;
-                gap: 8px;
-            }
-            
-            button {
-                padding: 12px 16px;
-                min-width: 90px;
-                font-size: 15px;
+                font-size: 1.5rem;
+                margin-bottom: 8px;
             }
             
             .header-info {
-                font-size: 13px;
-                padding: 10px;
+                font-size: 12px;
+                padding: 8px;
             }
             
             .badge {
-                padding: 5px 10px;
-            }
-            
-            .tablero-container {
-                padding: 12px;
-            }
-            
-            .coordenadas-izquierdas,
-            .coordenadas-derechas {
-                width: 20px;
-                font-size: 12px;
-            }
-            
-            .coordenadas-superiores,
-            .coordenadas-inferiores {
-                padding-left: 20px;
-                font-size: 12px;
+                padding: 4px 8px;
+                font-size: 11px;
             }
             
             #tablero {
+                max-width: min(450px, 90vw);
                 border-width: 2px;
             }
             
-            .casilla img {
-                padding: 2px;
+            .casilla::after {
+                font-size: 8px;
+                bottom: 1px;
+                right: 1px;
             }
             
             .panel-derecho {
-                gap: 12px;
-            }
-            
-            .info-problema h3 {
-                font-size: 16px;
-            }
-            
-            .info-problema p {
-                font-size: 14px;
-            }
-            
-            .turno-indicador {
-                padding: 10px;
-                font-size: 1rem;
-            }
-            
-            .contador-fallos h4 {
-                font-size: 16px;
-            }
-            
-            .chat {
-                height: 200px;
+                gap: 10px;
             }
             
             .botones-panel {
@@ -471,31 +383,25 @@
             .btn-practica,
             .btn-finalizar {
                 width: 100%;
+                padding: 14px;
+                font-size: 16px;
             }
         }
         
-        /* Ajustes para pantallas muy pequeñas (menos de 400px) */
-        @media (max-width: 400px) {
+        /* Móviles muy pequeños */
+        @media (max-width: 380px) {
+            #tablero {
+                max-width: 95vw;
+            }
+            
+            .casilla::after {
+                font-size: 7px;
+            }
+            
             .header-info {
                 flex-direction: column;
                 align-items: center;
-                text-align: center;
-            }
-            
-            .coordenadas-izquierdas,
-            .coordenadas-derechas {
-                width: 18px;
-                font-size: 11px;
-            }
-            
-            .coordenadas-superiores,
-            .coordenadas-inferiores {
-                padding-left: 18px;
-                font-size: 11px;
-            }
-            
-            .casilla img {
-                padding: 1px;
+                gap: 4px;
             }
             
             .badge {
@@ -504,18 +410,22 @@
             }
         }
         
-        /* Orientación horizontal en móvil */
+        /* Orientación horizontal */
         @media (max-width: 900px) and (orientation: landscape) {
             .main-content { 
                 flex-direction: row; 
             }
             
             .tablero-container { 
-                min-width: 300px; 
+                min-width: 280px; 
             }
             
             #tablero {
                 max-width: 350px;
+            }
+            
+            .casilla::after {
+                font-size: 8px;
             }
         }
     </style>
@@ -548,60 +458,9 @@
             
             <div class="main-content">
                 <div class="tablero-container">
-                    <!-- TABLERO CON COORDENADAS -->
+                    <!-- TABLERO - SIN COORDENADAS EXTERNAS -->
                     <div class="tablero-wrapper">
-                        <!-- Coordenadas superiores (a-h) -->
-                        <div class="coordenadas-superiores" id="coordsSuperiores">
-                            <div class="coordenada-superior">a</div>
-                            <div class="coordenada-superior">b</div>
-                            <div class="coordenada-superior">c</div>
-                            <div class="coordenada-superior">d</div>
-                            <div class="coordenada-superior">e</div>
-                            <div class="coordenada-superior">f</div>
-                            <div class="coordenada-superior">g</div>
-                            <div class="coordenada-superior">h</div>
-                        </div>
-                        
-                        <div class="tablero-con-coordenadas">
-                            <!-- Coordenadas izquierdas (8-1) -->
-                            <div class="coordenadas-izquierdas" id="coordsIzquierdas">
-                                <div class="coordenada-izquierda">8</div>
-                                <div class="coordenada-izquierda">7</div>
-                                <div class="coordenada-izquierda">6</div>
-                                <div class="coordenada-izquierda">5</div>
-                                <div class="coordenada-izquierda">4</div>
-                                <div class="coordenada-izquierda">3</div>
-                                <div class="coordenada-izquierda">2</div>
-                                <div class="coordenada-izquierda">1</div>
-                            </div>
-                            
-                            <!-- Tablero -->
-                            <div id="tablero"></div>
-                            
-                            <!-- Coordenadas derechas (8-1) -->
-                            <div class="coordenadas-derechas" id="coordsDerechas">
-                                <div class="coordenada-derecha">8</div>
-                                <div class="coordenada-derecha">7</div>
-                                <div class="coordenada-derecha">6</div>
-                                <div class="coordenada-derecha">5</div>
-                                <div class="coordenada-derecha">4</div>
-                                <div class="coordenada-derecha">3</div>
-                                <div class="coordenada-derecha">2</div>
-                                <div class="coordenada-derecha">1</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Coordenadas inferiores (a-h) -->
-                        <div class="coordenadas-inferiores" id="coordsInferiores">
-                            <div class="coordenada-inferior">a</div>
-                            <div class="coordenada-inferior">b</div>
-                            <div class="coordenada-inferior">c</div>
-                            <div class="coordenada-inferior">d</div>
-                            <div class="coordenada-inferior">e</div>
-                            <div class="coordenada-inferior">f</div>
-                            <div class="coordenada-inferior">g</div>
-                            <div class="coordenada-inferior">h</div>
-                        </div>
+                        <div id="tablero"></div>
                     </div>
                     
                     <div class="botones-panel">
