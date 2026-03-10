@@ -17,7 +17,7 @@ const CONFIG = {
 // BASE DE DATOS DE PROBLEMAS
 // ============================================
 const problemas = [
-    {
+     {
         id: 1,
         fen: "r1b2r1k/ppp1b1pp/2n1q3/8/2B5/5N2/PP2QPPP/R4RK1 w - - 0 1",
         solucion: ["Bxe6"],
@@ -37,6 +37,55 @@ const problemas = [
         solucion: ["Qxb8#"],
         objetivo: "Ejercicio mixto",
         descripcion: "Mix A vs 01"
+    },
+    {
+        id: 4,
+        fen: "r4r2/pp2npkp/4p1p1/1N1pNb2/2qP4/8/PPP2PPP/R2Q1RK1 w - - 0 1",
+        solucion: ["Nxc4"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix A vs 05"
+    },
+    {
+        id: 5,
+        fen: "8/8/8/8/2nb2B1/3k4/3B4/4K3 w - - 0 1",
+        solucion: ["Bf5#"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix A vs 06"
+    },
+    {
+        id: 6,
+        fen: "r2q1rk1/2p1bppp/p3p3/1pPp4/1n1PnB2/P3PN2/1P2BPPP/R2QK2R b KQ - 0 1",
+        solucion: ["Nc6"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix A vs 08"
+    },
+    {
+        id: 7,
+        fen: "3rr3/2p1k2p/ppb2R2/2p1P2p/8/8/PPP4P/2K3R1 w - - 0 1",
+        solucion: ["Rg7#"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix A vs 09"
+    },
+    {
+        id: 8,
+        fen: "8/8/6k1/6P1/1p6/8/pK6/8 b - - 0 1",
+        solucion: ["b3"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix A vs 10"
+    },
+    {
+        id: 9,
+        fen: "1R4k1/4rpp1/5n1p/8/8/pN6/P1B2PPb/5K2 b - - 0 1",
+        solucion: ["Bxb8"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix A vs 11"
+    },
+    {
+        id: 10,
+        fen: "rn1q1k2/p1ppp1br/5nQ1/1B4B1/3Pb2P/2P1N3/PP3P2/R3K1R1 w Q - 0 1",
+        solucion: ["Nf5"],
+        objetivo: "Ejercicio mixto",
+        descripcion: "Mix A vs 12"
     }
     // AQUÍ VAN TUS 265 PROBLEMAS RESTANTES
     // ... (mantén tu lista completa)
