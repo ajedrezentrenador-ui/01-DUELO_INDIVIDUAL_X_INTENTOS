@@ -37,7 +37,17 @@
             color: #2c3e50;
             margin-bottom: 15px;
             font-size: clamp(1.5rem, 4vw, 2.2rem);
-            letter-spacing: 1px;
+        }
+        
+        .turno-principal {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 50px;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
         
         .modo-badge {
@@ -176,7 +186,7 @@
         }
         
         /* ============================================ */
-        /* TABLERO ESTILO PERFECT CHESS TRAINER         */
+        /* TABLERO COMPACTO - LETRAS FUERA, NÚMEROS DENTRO */
         /* ============================================ */
         .tablero-container {
             flex: 2;
@@ -193,15 +203,15 @@
             align-items: center;
         }
         
-        /* Coordenadas superiores (A-H) */
+        /* Coordenadas superiores (A-H) - FUERA del tablero */
         .coordenadas-superiores {
             display: flex;
             width: 100%;
             margin-bottom: 5px;
-            padding-left: 30px;
             font-weight: bold;
             color: #7f8c8d;
             font-size: 14px;
+            padding-left: 0;
         }
         
         .coordenada-superior {
@@ -210,32 +220,7 @@
             text-transform: uppercase;
         }
         
-        /* Fila del tablero con coordenadas izquierdas */
-        .tablero-con-coordenadas {
-            display: flex;
-            width: 100%;
-        }
-        
-        .coordenadas-izquierdas {
-            display: flex;
-            flex-direction: column;
-            width: 30px;
-            justify-content: space-around;
-            margin-right: 5px;
-            font-weight: bold;
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-        
-        .coordenada-izquierda {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
         #tablero {
-            flex: 1;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             border: 3px solid #34495e;
@@ -257,10 +242,11 @@
         }
         
         .casilla img {
-            width: 90%;
-            height: 90%;
+            width: 85%;
+            height: 85%;
             object-fit: contain;
             transition: transform 0.1s;
+            z-index: 2;
         }
         
         .casilla:active img {
@@ -274,15 +260,33 @@
             background: #7f8c8d; 
         }
         
-        /* Coordenadas inferiores (A-H) */
+        /* Números de fila DENTRO de la casilla (esquina) */
+        .casilla::after {
+            content: attr(data-fila-num);
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 10px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Color más claro para casillas oscuras */
+        .casilla.negra::after {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Coordenadas inferiores (A-H) - FUERA del tablero */
         .coordenadas-inferiores {
             display: flex;
             width: 100%;
             margin-top: 5px;
-            padding-left: 30px;
             font-weight: bold;
             color: #7f8c8d;
             font-size: 14px;
+            padding-left: 0;
         }
         
         .coordenada-inferior {
@@ -321,19 +325,6 @@
             line-height: 1.5;
             margin-bottom: 15px;
             min-height: 50px;
-        }
-        
-        .turno-indicador {
-            background: #f39c12;
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-align: center;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-top: 10px;
         }
         
         .contador-fallos {
@@ -472,6 +463,11 @@
                 font-size: 1.6rem;
             }
             
+            .turno-principal {
+                font-size: 1.1rem;
+                padding: 10px;
+            }
+            
             .header-info {
                 font-size: 13px;
                 padding: 12px;
@@ -485,30 +481,21 @@
             .coordenadas-superiores,
             .coordenadas-inferiores {
                 font-size: 12px;
-                padding-left: 25px;
-            }
-            
-            .coordenadas-izquierdas {
-                width: 25px;
-                font-size: 12px;
-            }
-            
-            #tablero {
-                border-width: 2px;
             }
             
             .casilla img {
-                width: 85%;
-                height: 85%;
+                width: 80%;
+                height: 80%;
+            }
+            
+            .casilla::after {
+                font-size: 8px;
+                top: 1px;
+                left: 1px;
             }
             
             .panel-derecho {
                 gap: 15px;
-            }
-            
-            .turno-indicador {
-                font-size: 1rem;
-                padding: 12px;
             }
             
             .botones-panel {
@@ -536,15 +523,8 @@
                 text-align: center;
             }
             
-            .coordenadas-superiores,
-            .coordenadas-inferiores {
-                font-size: 10px;
-                padding-left: 20px;
-            }
-            
-            .coordenadas-izquierdas {
-                width: 20px;
-                font-size: 10px;
+            .casilla::after {
+                font-size: 7px;
             }
         }
         
@@ -571,6 +551,9 @@
             <div id="modoInfo" class="modo-badge">🎯 MODO PRÁCTICA</div>
         </div>
         
+        <!-- TURNO PRINCIPAL (ARRIBA DEL TABLERO) -->
+        <div id="turnoPrincipal" class="turno-principal" style="background: #f39c12;">⚪ Juegan blancas</div>
+        
         <div class="conexion">
             <span>Estado: <span id="estado" class="desconectado">Desconectado</span></span>
             <button id="btnConectar">Conectar</button>
@@ -594,9 +577,9 @@
             
             <div class="main-content">
                 <div class="tablero-container">
-                    <!-- TABLERO ESTILO PERFECT CHESS TRAINER -->
+                    <!-- TABLERO COMPACTO -->
                     <div class="tablero-wrapper">
-                        <!-- Coordenadas superiores (A-H) -->
+                        <!-- Coordenadas superiores (A-H) fuera -->
                         <div class="coordenadas-superiores">
                             <div class="coordenada-superior">A</div>
                             <div class="coordenada-superior">B</div>
@@ -608,24 +591,10 @@
                             <div class="coordenada-superior">H</div>
                         </div>
                         
-                        <div class="tablero-con-coordenadas">
-                            <!-- Coordenadas izquierdas (8-1) -->
-                            <div class="coordenadas-izquierdas">
-                                <div class="coordenada-izquierda">8</div>
-                                <div class="coordenada-izquierda">7</div>
-                                <div class="coordenada-izquierda">6</div>
-                                <div class="coordenada-izquierda">5</div>
-                                <div class="coordenada-izquierda">4</div>
-                                <div class="coordenada-izquierda">3</div>
-                                <div class="coordenada-izquierda">2</div>
-                                <div class="coordenada-izquierda">1</div>
-                            </div>
-                            
-                            <!-- Tablero -->
-                            <div id="tablero"></div>
-                        </div>
+                        <!-- Tablero (los números van DENTRO) -->
+                        <div id="tablero"></div>
                         
-                        <!-- Coordenadas inferiores (A-H) -->
+                        <!-- Coordenadas inferiores (A-H) fuera -->
                         <div class="coordenadas-inferiores">
                             <div class="coordenada-inferior">A</div>
                             <div class="coordenada-inferior">B</div>
@@ -648,9 +617,6 @@
                     <div class="info-problema">
                         <h3>Problema</h3>
                         <p id="problemaDesc">Esperando...</p>
-                        
-                        <!-- TURNO DESTACADO (siempre visible) -->
-                        <div id="turnoDisplay" class="turno-indicador">⚪ Juegan blancas</div>
                     </div>
                     
                     <div class="contador-fallos">
