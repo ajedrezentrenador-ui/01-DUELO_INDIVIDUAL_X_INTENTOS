@@ -90,7 +90,6 @@ function dibujarTablero() {
         }
     }
     
-    // Actualizar indicador de turno
     actualizarTurno();
 }
 
@@ -257,7 +256,12 @@ function quitarResaltado() {
 }
 
 btnConectar.onclick = () => {
-    socket = new WebSocket('ws://localhost:8080');
+    // Determinar la URL del WebSocket según el entorno
+    const wsUrl = window.location.hostname === 'localhost' 
+        ? 'ws://localhost:8080' 
+        : `wss://${window.location.hostname}`;
+    
+    socket = new WebSocket(wsUrl);
     
     socket.onopen = () => {
         estadoSpan.textContent = 'Conectado';
