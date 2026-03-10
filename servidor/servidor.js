@@ -38,7 +38,8 @@ const problemas = [
         objetivo: "Ejercicio mixto",
         descripcion: "Mix A vs 01"
     }
-    // ... AQUÍ VAN TUS 265 PROBLEMAS RESTANTES (mantén tu lista completa)
+    // AQUÍ VAN TUS 265 PROBLEMAS RESTANTES
+    // ... (mantén tu lista completa)
 ];
 
 // ============================================
@@ -178,6 +179,7 @@ wss.on('connection', (ws) => {
                         total: 0,
                         puntuacionTotal: 0
                     };
+                    j.problemasDisponibles = problemas.map(p => p.id);
                     ws.send(JSON.stringify({ tipo: 'practica_iniciada' }));
                     enviarSiguienteProblema(idJugador);
                     break;
@@ -210,21 +212,38 @@ function enviarSiguienteProblema(idJugador) {
     const jugador = jugadores[idJugador];
     if (!jugador || !jugador.entrenamientoActivo) return;
 
+    // Verificar si llegó al límite de fallos
     if (jugador.fallos >= CONFIG.fallosMaximos) {
         finalizarPractica(idJugador, 'limite_fallos');
         return;
     }
 
+    // Verificar si quedan problemas disponibles
     if (jugador.problemasDisponibles.length === 0) {
-        jugador.problemasDisponibles = problemas.map(p => p.id);
+        console.log(`🏁 Jugador ${idJugador} completó TODOS los problemas`);
+        finalizarPractica(idJugador, 'completados');
+        return;
     }
 
-    const idProblema = jugador.problemasDisponibles[Math.floor(Math.random() * jugador.problemasDisponibles.length)];
-    const problema = JSON.parse(JSON.stringify(problemas.find(p => p.id === idProblema)));
+    // Seleccionar problema aleatorio de los disponibles
+    const indiceAleatorio = Math.floor(Math.random() * jugador.problemasDisponibles.length);
+    const idProblema = jugador.problemasDisponibles[indiceAleatorio];
+    const problemaOriginal = problemas.find(p => p.id === idProblema);
+    
+    if (!problemaOriginal) {
+        console.error(`❌ Problema ${idProblema} no encontrado`);
+        return;
+    }
+    
+    const problema = JSON.parse(JSON.stringify(problemaOriginal));
     
     jugador.problemaActual = problema;
     jugador.indiceMovimiento = 0;
     jugador.intentosActuales = 1;
+
+    console.log(`📤 Enviando problema ${problema.id} a ${idJugador}`);
+    console.log(`   Problemas restantes: ${jugador.problemasDisponibles.length}`);
+    console.log(`   Fallos: ${jugador.fallos}/${CONFIG.fallosMaximos}`);
 
     const colorJugador = problema.fen.includes(' w ') ? 'w' : 'b';
 
@@ -343,9 +362,20 @@ function finalizarPractica(idJugador, razon) {
     
     jugador.entrenamientoActivo = false;
     
+    let mensajeRazon = '';
+    if (razon === 'limite_fallos') {
+        mensajeRazon = '❌ Llegaste al límite de fallos';
+    } else if (razon === 'completados') {
+        mensajeRazon = '🏁 ¡Completaste TODOS los problemas!';
+    } else {
+        mensajeRazon = '🏁 Práctica finalizada';
+    }
+    
     const porcentajePromedio = jugador.stats.total > 0 
         ? Math.round((jugador.stats.primerIntento * 100 + jugador.stats.segundoIntento * 66 + jugador.stats.tercerIntento * 33) / jugador.stats.total) 
         : 0;
+    
+    console.log(`🏁 Práctica finalizada para ${idJugador}: ${mensajeRazon}`);
     
     jugador.conexion.send(JSON.stringify({
         tipo: 'fin_practica',
@@ -357,7 +387,8 @@ function finalizarPractica(idJugador, razon) {
             fallados: jugador.stats.fallados,
             total: jugador.stats.total,
             porcentajePromedio: porcentajePromedio,
-            razon: razon
+            razon: razon,
+            mensaje: mensajeRazon
         }
     }));
     
