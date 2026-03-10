@@ -22,7 +22,7 @@ const puntuacionSpan = document.getElementById('puntuacion');
 const aciertosSpan = document.getElementById('aciertos');
 const fallosSpan = document.getElementById('fallos');
 const fallosMaximosSpan = document.getElementById('fallosMaximos');
-const turnoDisplay = document.getElementById('turnoDisplay');
+const turnoPrincipal = document.getElementById('turnoPrincipal'); // Turno arriba
 const problemaDescSpan = document.getElementById('problemaDesc');
 const mensajesDiv = document.getElementById('mensajes');
 const barraFallos = document.getElementById('barraFallos');
@@ -52,6 +52,7 @@ function dibujarTablero() {
     
     for (let i = 0; i < 8; i++) {
         const fila = rotado ? 7 - i : i;
+        const numeroFila = 8 - fila; // Número real de la fila (1-8)
         
         for (let j = 0; j < 8; j++) {
             const columna = rotado ? 7 - j : j;
@@ -61,6 +62,7 @@ function dibujarTablero() {
             casilla.className = `casilla ${(fila + columna) % 2 === 0 ? 'blanca' : 'negra'}`;
             casilla.dataset.fila = fila;
             casilla.dataset.columna = columna;
+            casilla.dataset.filaNum = numeroFila; // Para mostrar el número
             
             if (pieza) {
                 const img = document.createElement('img');
@@ -97,15 +99,15 @@ function dibujarTablero() {
     actualizarTurno();
 }
 
-// Actualizar indicador de turno (siempre visible)
+// Actualizar indicador de turno (ahora en turnoPrincipal)
 function actualizarTurno() {
     const turno = chess.turn();
     if (turno === 'w') {
-        turnoDisplay.innerHTML = '⚪ Juegan blancas';
-        turnoDisplay.style.background = '#f39c12';
+        turnoPrincipal.innerHTML = '⚪ Juegan blancas';
+        turnoPrincipal.style.background = '#f39c12';
     } else {
-        turnoDisplay.innerHTML = '⚫ Juegan negras';
-        turnoDisplay.style.background = '#34495e';
+        turnoPrincipal.innerHTML = '⚫ Juegan negras';
+        turnoPrincipal.style.background = '#34495e';
     }
 }
 
@@ -342,7 +344,7 @@ function quitarResaltado() {
     });
 }
 
-// Conexión WebSocket
+// Conexión WebSocket (el resto del código sigue igual)
 btnConectar.onclick = () => {
     const wsUrl = window.location.hostname === 'localhost' 
         ? 'ws://localhost:8080' 
