@@ -76,7 +76,7 @@ function dibujarTablero() {
                 img.style.cursor = 'grab';
                 img.style.userSelect = 'none';
                 img.style.pointerEvents = 'auto';
-                img.style.touchAction = 'none'; // Mejor para móviles
+                img.style.touchAction = 'none';
                 
                 img.addEventListener('mousedown', iniciarArrastre);
                 img.addEventListener('touchstart', iniciarArrastreTouch, { passive: false });
@@ -97,7 +97,7 @@ function dibujarTablero() {
     actualizarTurno();
 }
 
-// Actualizar indicador de turno
+// Actualizar indicador de turno (siempre visible)
 function actualizarTurno() {
     const turno = chess.turn();
     if (turno === 'w') {
@@ -517,8 +517,8 @@ function mostrarEstadisticasPractica(estadisticas) {
     
     const html = `
         <div style="text-align: center;">
-            <h3>📊 ESTADÍSTICAS DE LA PRÁCTICA</h3>
-            <p style="font-size: 1.2em; font-weight: bold; color: #2c3e50;">${mensaje}</p>
+            <h3 style="color: #2c3e50; margin-bottom: 15px;">📊 ESTADÍSTICAS DE LA PRÁCTICA</h3>
+            <p style="font-size: 1.2em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">${mensaje}</p>
             <hr>
             <table style="width: 100%; margin: 15px 0; border-collapse: collapse;">
                 <tr>
