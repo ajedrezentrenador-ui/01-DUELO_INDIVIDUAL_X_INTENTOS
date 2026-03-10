@@ -186,7 +186,7 @@
         }
         
         /* ============================================ */
-        /* TABLERO COMPACTO - LETRAS FUERA, NÚMEROS DENTRO */
+        /* TABLERO - SOLO LETRAS DE COLUMNAS (a-h)      */
         /* ============================================ */
         .tablero-container {
             flex: 2;
@@ -203,7 +203,7 @@
             align-items: center;
         }
         
-        /* Coordenadas superiores (A-H) - FUERA del tablero */
+        /* Coordenadas superiores (a-h) */
         .coordenadas-superiores {
             display: flex;
             width: 100%;
@@ -217,7 +217,7 @@
         .coordenada-superior {
             flex: 1;
             text-align: center;
-            text-transform: uppercase;
+            text-transform: lowercase;
         }
         
         #tablero {
@@ -242,8 +242,8 @@
         }
         
         .casilla img {
-            width: 85%;
-            height: 85%;
+            width: 90%;
+            height: 90%;
             object-fit: contain;
             transition: transform 0.1s;
             z-index: 2;
@@ -260,25 +260,7 @@
             background: #7f8c8d; 
         }
         
-        /* Números de fila DENTRO de la casilla (esquina) */
-        .casilla::after {
-            content: attr(data-fila-num);
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            font-size: 10px;
-            font-weight: bold;
-            color: rgba(0, 0, 0, 0.4);
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        /* Color más claro para casillas oscuras */
-        .casilla.negra::after {
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        /* Coordenadas inferiores (A-H) - FUERA del tablero */
+        /* Coordenadas inferiores (a-h) */
         .coordenadas-inferiores {
             display: flex;
             width: 100%;
@@ -292,7 +274,7 @@
         .coordenada-inferior {
             flex: 1;
             text-align: center;
-            text-transform: uppercase;
+            text-transform: lowercase;
         }
         
         /* Panel derecho */
@@ -484,14 +466,8 @@
             }
             
             .casilla img {
-                width: 80%;
-                height: 80%;
-            }
-            
-            .casilla::after {
-                font-size: 8px;
-                top: 1px;
-                left: 1px;
+                width: 85%;
+                height: 85%;
             }
             
             .panel-derecho {
@@ -521,10 +497,6 @@
             .badge {
                 width: 100%;
                 text-align: center;
-            }
-            
-            .casilla::after {
-                font-size: 7px;
             }
         }
         
@@ -577,33 +549,33 @@
             
             <div class="main-content">
                 <div class="tablero-container">
-                    <!-- TABLERO COMPACTO -->
+                    <!-- TABLERO - SOLO LETRAS DE COLUMNAS -->
                     <div class="tablero-wrapper">
-                        <!-- Coordenadas superiores (A-H) fuera -->
+                        <!-- Coordenadas superiores (a-h) -->
                         <div class="coordenadas-superiores">
-                            <div class="coordenada-superior">A</div>
-                            <div class="coordenada-superior">B</div>
-                            <div class="coordenada-superior">C</div>
-                            <div class="coordenada-superior">D</div>
-                            <div class="coordenada-superior">E</div>
-                            <div class="coordenada-superior">F</div>
-                            <div class="coordenada-superior">G</div>
-                            <div class="coordenada-superior">H</div>
+                            <div class="coordenada-superior">a</div>
+                            <div class="coordenada-superior">b</div>
+                            <div class="coordenada-superior">c</div>
+                            <div class="coordenada-superior">d</div>
+                            <div class="coordenada-superior">e</div>
+                            <div class="coordenada-superior">f</div>
+                            <div class="coordenada-superior">g</div>
+                            <div class="coordenada-superior">h</div>
                         </div>
                         
-                        <!-- Tablero (los números van DENTRO) -->
+                        <!-- Tablero (sin números) -->
                         <div id="tablero"></div>
                         
-                        <!-- Coordenadas inferiores (A-H) fuera -->
+                        <!-- Coordenadas inferiores (a-h) -->
                         <div class="coordenadas-inferiores">
-                            <div class="coordenada-inferior">A</div>
-                            <div class="coordenada-inferior">B</div>
-                            <div class="coordenada-inferior">C</div>
-                            <div class="coordenada-inferior">D</div>
-                            <div class="coordenada-inferior">E</div>
-                            <div class="coordenada-inferior">F</div>
-                            <div class="coordenada-inferior">G</div>
-                            <div class="coordenada-inferior">H</div>
+                            <div class="coordenada-inferior">a</div>
+                            <div class="coordenada-inferior">b</div>
+                            <div class="coordenada-inferior">c</div>
+                            <div class="coordenada-inferior">d</div>
+                            <div class="coordenada-inferior">e</div>
+                            <div class="coordenada-inferior">f</div>
+                            <div class="coordenada-inferior">g</div>
+                            <div class="coordenada-inferior">h</div>
                         </div>
                     </div>
                     
