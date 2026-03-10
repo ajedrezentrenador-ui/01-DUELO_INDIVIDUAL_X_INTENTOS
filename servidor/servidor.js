@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 // ============================================
-// CONFIGURACIÓN
+// CONFIGURACIÓN DEL ENTRENADOR
 // ============================================
 const CONFIG = {
     modoJuego: 'practica',
@@ -14,7 +14,7 @@ const CONFIG = {
 };
 
 // ============================================
-// PROBLEMAS (mantén tu lista completa)
+// BASE DE DATOS DE PROBLEMAS
 // ============================================
 const problemas = [
     {
@@ -38,14 +38,14 @@ const problemas = [
         objetivo: "Ejercicio mixto",
         descripcion: "Mix A vs 01"
     }
-    // ... AQUÍ VAN TODOS TUS PROBLEMAS (268)
+    // ... AQUÍ VAN TUS 265 PROBLEMAS RESTANTES (mantén tu lista completa)
 ];
 
 // ============================================
-// SERVIDOR HTTP (para archivos estáticos)
+// SERVIDOR HTTP PARA ARCHIVOS ESTÁTICOS
 // ============================================
 const server = http.createServer((req, res) => {
-    console.log(`📁 Solicitud HTTP: ${req.url}`);
+    console.log(`📁 Solicitud: ${req.url}`);
     
     // Construir ruta del archivo
     let filePath;
@@ -57,6 +57,8 @@ const server = http.createServer((req, res) => {
     
     // Determinar Content-Type
     const ext = path.extname(filePath);
+    let contentType = 'text/html';
+    
     const mimeTypes = {
         '.html': 'text/html',
         '.js': 'text/javascript',
@@ -64,9 +66,15 @@ const server = http.createServer((req, res) => {
         '.json': 'application/json',
         '.png': 'image/png',
         '.jpg': 'image/jpeg',
-        '.svg': 'image/svg+xml'
+        '.jpeg': 'image/jpeg',
+        '.svg': 'image/svg+xml',
+        '.ico': 'image/x-icon',
+        '.txt': 'text/plain'
     };
-    const contentType = mimeTypes[ext] || 'text/plain';
+    
+    if (mimeTypes[ext]) {
+        contentType = mimeTypes[ext];
+    }
     
     // Leer archivo
     fs.readFile(filePath, (err, content) => {
@@ -86,7 +94,7 @@ const server = http.createServer((req, res) => {
 });
 
 // ============================================
-// SERVIDOR WEBSOCKET (sobre el mismo puerto)
+// SERVIDOR WEBSOCKET
 // ============================================
 const wss = new WebSocket.Server({ server });
 let jugadores = {};
@@ -95,9 +103,12 @@ console.log("====================================");
 console.log("🖥️  SERVIDOR DE DUELO DE PROBLEMAS");
 console.log("====================================");
 console.log(`📚 Problemas: ${problemas.length}`);
+console.log(`🎯 Fallos máximos: ${CONFIG.fallosMaximos}`);
+console.log(`🎯 Intentos por problema: ${CONFIG.intentosPorProblema}`);
+console.log("====================================");
 
 // ============================================
-// MANEJADORES WEBSOCKET (los mismos que tenías)
+// MANEJADORES WEBSOCKET
 // ============================================
 wss.on('connection', (ws) => {
     if (Object.keys(jugadores).length >= CONFIG.maxJugadores) {
@@ -160,8 +171,12 @@ wss.on('connection', (ws) => {
                     j.fallos = 0;
                     j.aciertos = 0;
                     j.stats = {
-                        primerIntento: 0, segundoIntento: 0, tercerIntento: 0,
-                        fallados: 0, total: 0, puntuacionTotal: 0
+                        primerIntento: 0,
+                        segundoIntento: 0,
+                        tercerIntento: 0,
+                        fallados: 0,
+                        total: 0,
+                        puntuacionTotal: 0
                     };
                     ws.send(JSON.stringify({ tipo: 'practica_iniciada' }));
                     enviarSiguienteProblema(idJugador);
@@ -192,34 +207,36 @@ wss.on('connection', (ws) => {
 // ============================================
 
 function enviarSiguienteProblema(idJugador) {
-    const j = jugadores[idJugador];
-    if (!j || !j.entrenamientoActivo) return;
+    const jugador = jugadores[idJugador];
+    if (!jugador || !jugador.entrenamientoActivo) return;
 
-    if (j.fallos >= CONFIG.fallosMaximos) {
+    if (jugador.fallos >= CONFIG.fallosMaximos) {
         finalizarPractica(idJugador, 'limite_fallos');
         return;
     }
 
-    if (j.problemasDisponibles.length === 0) {
-        j.problemasDisponibles = problemas.map(p => p.id);
+    if (jugador.problemasDisponibles.length === 0) {
+        jugador.problemasDisponibles = problemas.map(p => p.id);
     }
 
-    const idProblema = j.problemasDisponibles[Math.floor(Math.random() * j.problemasDisponibles.length)];
+    const idProblema = jugador.problemasDisponibles[Math.floor(Math.random() * jugador.problemasDisponibles.length)];
     const problema = JSON.parse(JSON.stringify(problemas.find(p => p.id === idProblema)));
     
-    j.problemaActual = problema;
-    j.indiceMovimiento = 0;
-    j.intentosActuales = 1;
+    jugador.problemaActual = problema;
+    jugador.indiceMovimiento = 0;
+    jugador.intentosActuales = 1;
 
-    j.conexion.send(JSON.stringify({
+    const colorJugador = problema.fen.includes(' w ') ? 'w' : 'b';
+
+    jugador.conexion.send(JSON.stringify({
         tipo: 'problema',
         fen: problema.fen,
-        colorJugador: problema.fen.includes(' w ') ? 'w' : 'b',
+        colorJugador: colorJugador,
         descripcion: problema.descripcion,
         objetivo: problema.objetivo,
-        fallosActuales: j.fallos,
+        fallosActuales: jugador.fallos,
         fallosMaximos: CONFIG.fallosMaximos,
-        aciertos: j.aciertos,
+        aciertos: jugador.aciertos,
         intento: 1
     }));
     
@@ -227,107 +244,119 @@ function enviarSiguienteProblema(idJugador) {
 }
 
 function manejarMovimiento(idJugador, datos) {
-    const j = jugadores[idJugador];
-    if (!j || !j.problemaActual) return;
+    const jugador = jugadores[idJugador];
+    if (!jugador || !jugador.problemaActual) return;
 
-    const esperado = j.problemaActual.solucion[j.indiceMovimiento];
-    console.log(`   Movimiento: ${datos.movimiento} (esperado: ${esperado})`);
+    const problema = jugador.problemaActual;
+    const indice = jugador.indiceMovimiento;
+    const movimientoEsperado = problema.solucion[indice];
+    
+    console.log(`   Movimiento: ${datos.movimiento} (esperado: ${movimientoEsperado})`);
 
-    if (datos.movimiento === esperado) {
-        j.indiceMovimiento++;
+    if (datos.movimiento === movimientoEsperado) {
+        jugador.indiceMovimiento++;
         
-        if (j.indiceMovimiento >= j.problemaActual.solucion.length) {
-            j.aciertos++;
-            j.stats.total++;
-            j.stats.puntuacionTotal += 10;
+        if (jugador.indiceMovimiento >= problema.solucion.length) {
+            // Problema completado
+            jugador.aciertos++;
+            jugador.stats.total++;
+            jugador.stats.puntuacionTotal += 10;
             
-            switch(j.intentosActuales) {
-                case 1: j.stats.primerIntento++; break;
-                case 2: j.stats.segundoIntento++; break;
-                case 3: j.stats.tercerIntento++; break;
+            switch(jugador.intentosActuales) {
+                case 1: jugador.stats.primerIntento++; break;
+                case 2: jugador.stats.segundoIntento++; break;
+                case 3: jugador.stats.tercerIntento++; break;
             }
             
-            j.problemasResueltos.push(j.problemaActual.id);
-            j.problemasDisponibles = j.problemasDisponibles.filter(id => id !== j.problemaActual.id);
+            jugador.problemasResueltos.push(problema.id);
+            jugador.problemasDisponibles = jugador.problemasDisponibles.filter(id => id !== problema.id);
             
-            j.conexion.send(JSON.stringify({ tipo: 'movimiento_correcto', mensaje: '¡Problema completado!' }));
+            jugador.conexion.send(JSON.stringify({
+                tipo: 'movimiento_correcto',
+                mensaje: '¡Problema completado!'
+            }));
+            
             setTimeout(() => enviarSiguienteProblema(idJugador), 1500);
         } else {
-            j.conexion.send(JSON.stringify({ tipo: 'movimiento_correcto', mensaje: '¡Correcto!' }));
+            jugador.conexion.send(JSON.stringify({
+                tipo: 'movimiento_correcto',
+                mensaje: '¡Correcto!'
+            }));
         }
     } else {
-        if (j.intentosActuales >= CONFIG.intentosPorProblema) {
-            j.fallos++;
-            j.stats.fallados++;
-            j.stats.total++;
-            j.problemasFallados.push(j.problemaActual.id);
-            j.problemasDisponibles = j.problemasDisponibles.filter(id => id !== j.problemaActual.id);
+        if (jugador.intentosActuales >= CONFIG.intentosPorProblema) {
+            jugador.fallos++;
+            jugador.stats.fallados++;
+            jugador.stats.total++;
             
-            j.conexion.send(JSON.stringify({
+            jugador.problemasFallados.push(problema.id);
+            jugador.problemasDisponibles = jugador.problemasDisponibles.filter(id => id !== problema.id);
+            
+            jugador.conexion.send(JSON.stringify({
                 tipo: 'movimiento_incorrecto',
-                correcto: esperado,
-                fallosActuales: j.fallos,
+                correcto: movimientoEsperado,
+                fallosActuales: jugador.fallos,
                 fallosMaximos: CONFIG.fallosMaximos,
                 definitivo: true
             }));
             
-            setTimeout(() => {
-                if (j.fallos >= CONFIG.fallosMaximos) {
-                    finalizarPractica(idJugador, 'limite_fallos');
-                } else {
-                    enviarSiguienteProblema(idJugador);
-                }
-            }, 2000);
+            if (jugador.fallos >= CONFIG.fallosMaximos) {
+                setTimeout(() => finalizarPractica(idJugador, 'limite_fallos'), 2000);
+            } else {
+                setTimeout(() => enviarSiguienteProblema(idJugador), 2000);
+            }
         } else {
-            j.intentosActuales++;
-            j.conexion.send(JSON.stringify({
+            jugador.intentosActuales++;
+            
+            jugador.conexion.send(JSON.stringify({
                 tipo: 'movimiento_incorrecto',
-                correcto: esperado,
-                intentosRestantes: CONFIG.intentosPorProblema - j.intentosActuales + 1,
+                correcto: movimientoEsperado,
+                intentosRestantes: CONFIG.intentosPorProblema - jugador.intentosActuales + 1,
                 definitivo: false
             }));
             
             setTimeout(() => {
-                j.indiceMovimiento = 0;
-                j.conexion.send(JSON.stringify({
+                jugador.indiceMovimiento = 0;
+                jugador.conexion.send(JSON.stringify({
                     tipo: 'problema',
-                    fen: j.problemaActual.fen,
-                    colorJugador: j.problemaActual.fen.includes(' w ') ? 'w' : 'b',
-                    descripcion: j.problemaActual.descripcion,
-                    objetivo: j.problemaActual.objetivo,
-                    fallosActuales: j.fallos,
+                    fen: problema.fen,
+                    colorJugador: problema.fen.includes(' w ') ? 'w' : 'b',
+                    descripcion: problema.descripcion,
+                    objetivo: problema.objetivo,
+                    fallosActuales: jugador.fallos,
                     fallosMaximos: CONFIG.fallosMaximos,
-                    aciertos: j.aciertos,
-                    intento: j.intentosActuales,
+                    aciertos: jugador.aciertos,
+                    intento: jugador.intentosActuales,
                     reintento: true
                 }));
             }, 1500);
         }
     }
+    
     enviarPuntuacion(idJugador);
     enviarListaJugadores();
 }
 
 function finalizarPractica(idJugador, razon) {
-    const j = jugadores[idJugador];
-    if (!j) return;
+    const jugador = jugadores[idJugador];
+    if (!jugador) return;
     
-    j.entrenamientoActivo = false;
+    jugador.entrenamientoActivo = false;
     
-    const porcentaje = j.stats.total > 0 
-        ? Math.round((j.stats.primerIntento * 100 + j.stats.segundoIntento * 66 + j.stats.tercerIntento * 33) / j.stats.total) 
+    const porcentajePromedio = jugador.stats.total > 0 
+        ? Math.round((jugador.stats.primerIntento * 100 + jugador.stats.segundoIntento * 66 + jugador.stats.tercerIntento * 33) / jugador.stats.total) 
         : 0;
     
-    j.conexion.send(JSON.stringify({
+    jugador.conexion.send(JSON.stringify({
         tipo: 'fin_practica',
         estadisticas: {
-            puntuacion: j.stats.puntuacionTotal,
-            primerIntento: j.stats.primerIntento,
-            segundoIntento: j.stats.segundoIntento,
-            tercerIntento: j.stats.tercerIntento,
-            fallados: j.stats.fallados,
-            total: j.stats.total,
-            porcentajePromedio: porcentaje,
+            puntuacion: jugador.stats.puntuacionTotal,
+            primerIntento: jugador.stats.primerIntento,
+            segundoIntento: jugador.stats.segundoIntento,
+            tercerIntento: jugador.stats.tercerIntento,
+            fallados: jugador.stats.fallados,
+            total: jugador.stats.total,
+            porcentajePromedio: porcentajePromedio,
             razon: razon
         }
     }));
@@ -336,14 +365,14 @@ function finalizarPractica(idJugador, razon) {
 }
 
 function enviarPuntuacion(idJugador) {
-    const j = jugadores[idJugador];
-    if (!j) return;
+    const jugador = jugadores[idJugador];
+    if (!jugador) return;
     
-    j.conexion.send(JSON.stringify({
+    jugador.conexion.send(JSON.stringify({
         tipo: 'puntuacion',
-        puntuacion: j.stats.puntuacionTotal,
-        fallos: j.fallos,
-        aciertos: j.aciertos
+        puntuacion: jugador.stats.puntuacionTotal,
+        fallos: jugador.fallos,
+        aciertos: jugador.aciertos
     }));
 }
 
@@ -355,6 +384,7 @@ function enviarListaJugadores() {
     }));
     
     const mensaje = JSON.stringify({ tipo: 'ranking', jugadores: lista });
+    
     Object.values(jugadores).forEach(j => {
         if (j.conexion.readyState === WebSocket.OPEN) {
             j.conexion.send(mensaje);
@@ -366,7 +396,8 @@ function enviarListaJugadores() {
 // INICIAR SERVIDOR
 // ============================================
 const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Servidor HTTP y WebSocket en puerto ${PORT}`);
     console.log(`🌐 Abre http://localhost:${PORT} en tu navegador`);
+    console.log(`📁 Sirviendo archivos desde: ${path.join(__dirname, '../cliente')}`);
 });

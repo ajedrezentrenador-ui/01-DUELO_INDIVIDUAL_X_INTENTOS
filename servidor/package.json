@@ -1,7 +1,12 @@
 {
-  "name": "servidor",
+  "name": "servidor-ajedrez",
   "version": "1.0.0",
+  "description": "Servidor de problemas de ajedrez",
+  "main": "servidor.js",
+  "scripts": {
+    "start": "node servidor.js"
+  },
   "dependencies": {
-    "ws": "^8.19.0"
+    "ws": "^8.14.2"
   }
 }
