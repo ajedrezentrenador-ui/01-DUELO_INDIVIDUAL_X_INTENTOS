@@ -11,6 +11,7 @@ let fallosMaximos = 3;
 let fallosActuales = 0;
 let aciertos = 0;
 
+// Elementos del DOM
 const estadoSpan = document.getElementById('estado');
 const btnConectar = document.getElementById('btnConectar');
 const btnDesconectar = document.getElementById('btnDesconectar');
@@ -31,17 +32,18 @@ const btnIniciarPractica = document.getElementById('btnIniciarPractica');
 const btnFinalizar = document.getElementById('btnFinalizar');
 const registroDiv = document.getElementById('registro');
 const juegoPanelDiv = document.getElementById('juegoPanel');
-const practicaPanelDiv = document.getElementById('practicaPanel');
 const rankingDiv = document.getElementById('ranking');
 const listaJugadoresDiv = document.getElementById('listaJugadores');
 const nombreInput = document.getElementById('nombreInput');
 
+// Función para obtener URL de la pieza
 function obtenerURLPieza(pieza) {
     const prefijo = pieza.color === 'w' ? 'w' : 'b';
     let tipo = pieza.type.toLowerCase();
     return `imagenes/${prefijo}${tipo}.svg`;
 }
 
+// Función para dibujar el tablero
 function dibujarTablero() {
     const tablero = chess.board();
     tableroDiv.innerHTML = '';
@@ -59,7 +61,11 @@ function dibujarTablero() {
             casilla.className = `casilla ${(fila + columna) % 2 === 0 ? 'blanca' : 'negra'}`;
             casilla.dataset.fila = fila;
             casilla.dataset.columna = columna;
-            casilla.dataset.coordenada = `${String.fromCharCode(97 + columna)}${8 - fila}`;
+            
+            // Coordenada para mostrar dentro de la casilla
+            const letra = String.fromCharCode(97 + columna);
+            const numero = 8 - fila;
+            casilla.dataset.coordenada = `${letra}${numero}`;
             
             if (pieza) {
                 const img = document.createElement('img');
@@ -71,12 +77,14 @@ function dibujarTablero() {
                 img.style.width = '100%';
                 img.style.height = '100%';
                 img.style.objectFit = 'contain';
-                img.style.padding = '5px';
+                img.style.padding = '2px';
                 img.style.cursor = 'grab';
                 img.style.userSelect = 'none';
                 img.style.pointerEvents = 'auto';
+                img.style.touchAction = 'none'; // Mejor para móviles
                 
                 img.addEventListener('mousedown', iniciarArrastre);
+                img.addEventListener('touchstart', iniciarArrastreTouch, { passive: false });
                 img.addEventListener('dragstart', (e) => e.preventDefault());
                 
                 casilla.appendChild(img);
@@ -85,6 +93,7 @@ function dibujarTablero() {
             casilla.addEventListener('dragover', (e) => e.preventDefault());
             casilla.addEventListener('drop', manejarSoltar);
             casilla.addEventListener('click', manejarClick);
+            casilla.addEventListener('touchend', manejarClickTouch);
             
             tableroDiv.appendChild(casilla);
         }
@@ -93,6 +102,7 @@ function dibujarTablero() {
     actualizarTurno();
 }
 
+// Actualizar indicador de turno
 function actualizarTurno() {
     const turno = chess.turn();
     if (turno === 'w') {
@@ -104,10 +114,11 @@ function actualizarTurno() {
     }
 }
 
+// Iniciar arrastre con mouse
 function iniciarArrastre(e) {
+    e.preventDefault();
     if (!puedeMover) {
         agregarMensaje('⏳ No es tu turno', 'sistema');
-        e.preventDefault();
         return;
     }
     
@@ -118,11 +129,9 @@ function iniciarArrastre(e) {
     
     if (color !== chess.turn()) {
         agregarMensaje('⏳ No es tu turno', 'sistema');
-        e.preventDefault();
         return;
     }
     
-    e.preventDefault();
     arrastrando = true;
     piezaSeleccionada = { fila, columna };
     
@@ -139,7 +148,6 @@ function iniciarArrastre(e) {
     clone.style.zIndex = '9999';
     clone.style.filter = 'drop-shadow(0 0 5px gold)';
     clone.style.transform = 'scale(1.1)';
-    clone.style.cursor = 'grabbing';
     
     document.body.appendChild(clone);
     
@@ -179,6 +187,85 @@ function iniciarArrastre(e) {
     document.addEventListener('mouseup', terminarArrastre);
 }
 
+// Iniciar arrastre con touch (móviles)
+function iniciarArrastreTouch(e) {
+    e.preventDefault();
+    if (!puedeMover) {
+        agregarMensaje('⏳ No es tu turno', 'sistema');
+        return;
+    }
+    
+    const touch = e.touches[0];
+    const img = e.target;
+    const fila = parseInt(img.dataset.fila);
+    const columna = parseInt(img.dataset.columna);
+    const color = img.dataset.color;
+    
+    if (color !== chess.turn()) {
+        agregarMensaje('⏳ No es tu turno', 'sistema');
+        return;
+    }
+    
+    arrastrando = true;
+    piezaSeleccionada = { fila, columna };
+    
+    img.style.opacity = '0.3';
+    
+    clone = img.cloneNode(true);
+    clone.style.position = 'fixed';
+    clone.style.width = '60px';
+    clone.style.height = '60px';
+    clone.style.left = (touch.clientX - 30) + 'px';
+    clone.style.top = (touch.clientY - 30) + 'px';
+    clone.style.opacity = '0.9';
+    clone.style.pointerEvents = 'none';
+    clone.style.zIndex = '9999';
+    clone.style.filter = 'drop-shadow(0 0 5px gold)';
+    clone.style.transform = 'scale(1.1)';
+    
+    document.body.appendChild(clone);
+    
+    function moverCloneTouch(e) {
+        e.preventDefault();
+        if (!arrastrando || !clone) return;
+        const touch = e.touches[0];
+        clone.style.left = (touch.clientX - 30) + 'px';
+        clone.style.top = (touch.clientY - 30) + 'px';
+    }
+    
+    function terminarArrastreTouch(e) {
+        e.preventDefault();
+        if (!arrastrando) return;
+        
+        arrastrando = false;
+        img.style.opacity = '1';
+        
+        if (clone && clone.parentNode) {
+            document.body.removeChild(clone);
+            clone = null;
+        }
+        
+        const touch = e.changedTouches[0];
+        const elementos = document.elementsFromPoint(touch.clientX, touch.clientY);
+        
+        for (let el of elementos) {
+            if (el.classList && el.classList.contains('casilla')) {
+                const filaDestino = parseInt(el.dataset.fila);
+                const columnaDestino = parseInt(el.dataset.columna);
+                realizarMovimiento(fila, columna, filaDestino, columnaDestino);
+                break;
+            }
+        }
+        
+        piezaSeleccionada = null;
+        document.removeEventListener('touchmove', moverCloneTouch);
+        document.removeEventListener('touchend', terminarArrastreTouch);
+    }
+    
+    document.addEventListener('touchmove', moverCloneTouch, { passive: false });
+    document.addEventListener('touchend', terminarArrastreTouch, { passive: false });
+}
+
 function manejarSoltar(e) {
     e.preventDefault();
 }
@@ -208,6 +295,11 @@ function manejarClick(e) {
         piezaSeleccionada = null;
         quitarResaltado();
     }
+}
+
+function manejarClickTouch(e) {
+    e.preventDefault();
+    manejarClick(e);
 }
 
 function realizarMovimiento(filaOrigen, columnaOrigen, filaDestino, columnaDestino) {
@@ -255,8 +347,8 @@ function quitarResaltado() {
     });
 }
 
+// Conexión WebSocket
 btnConectar.onclick = () => {
-    // Determinar la URL del WebSocket según el entorno
     const wsUrl = window.location.hostname === 'localhost' 
         ? 'ws://localhost:8080' 
         : `wss://${window.location.hostname}`;
@@ -424,6 +516,8 @@ btnFinalizar.onclick = () => {
 function mostrarEstadisticasPractica(estadisticas) {
     const mensaje = estadisticas.razon === 'limite_fallos' 
         ? '❌ Llegaste al límite de fallos' 
+        : estadisticas.razon === 'completados'
+        ? '🏁 ¡Completaste TODOS los problemas!'
         : '🏁 Práctica finalizada';
     
     const html = `
@@ -462,8 +556,8 @@ function mostrarEstadisticasPractica(estadisticas) {
                 </tr>
             </table>
             <hr>
-            <button onclick="document.body.removeChild(this.parentNode.parentNode.parentNode)" 
-                    style="padding: 10px 30px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 15px;">
+            <button onclick="this.closest('div').remove()" 
+                    style="padding: 12px 30px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 15px; font-size: 16px;">
                 Cerrar
             </button>
         </div>
@@ -480,13 +574,16 @@ function mostrarEstadisticasPractica(estadisticas) {
     modal.style.justifyContent = 'center';
     modal.style.alignItems = 'center';
     modal.style.zIndex = '10000';
+    modal.style.padding = '15px';
     
     const contenido = document.createElement('div');
     contenido.style.backgroundColor = 'white';
-    contenido.style.padding = '30px';
+    contenido.style.padding = '25px';
     contenido.style.borderRadius = '15px';
     contenido.style.maxWidth = '500px';
-    contenido.style.width = '90%';
+    contenido.style.width = '100%';
+    contenido.style.maxHeight = '90vh';
+    contenido.style.overflowY = 'auto';
     contenido.innerHTML = html;
     
     modal.appendChild(contenido);
@@ -509,9 +606,10 @@ function actualizarRanking(jugadores) {
     jugadores.forEach((j, i) => {
         const row = document.createElement('div');
         row.className = 'ranking-row';
-        row.innerHTML = `<span>${i+1}º</span><span style="flex:1">${j.nombre} ${j.activo ? '▶️' : ''}</span><span>${j.puntuacion} pts</span>`;
+        row.innerHTML = `<span>${i+1}º</span><span style="flex:1; margin-left: 10px;">${j.nombre} ${j.activo ? '▶️' : ''}</span><span>${j.puntuacion} pts</span>`;
         listaJugadoresDiv.appendChild(row);
     });
 }
 
+// Inicializar tablero
 dibujarTablero();
