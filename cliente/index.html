@@ -2,15 +2,20 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>🎯 DUELO DE PROBLEMAS - PRÁCTICA</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; /* Quita el resaltado al tocar en móvil */
+        }
         
         body { 
             font-family: 'Segoe UI', sans-serif;
             background: #1a2a3a;
-            padding: 10px;
+            padding: 8px;
             min-height: 100vh;
         }
         
@@ -19,18 +24,19 @@
             margin: 0 auto;
             background: #ecf0f1;
             border-radius: 20px;
-            padding: 20px;
+            padding: 15px;
         }
         
         h1 {
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: clamp(1.5rem, 5vw, 2rem); /* Tamaño responsive */
         }
         
         .modo-badge {
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.1em;
             margin-bottom: 10px;
             color: #27ae60;
             font-weight: bold;
@@ -38,48 +44,64 @@
         
         .conexion {
             text-align: center;
-            margin-bottom: 20px;
-            padding: 15px;
+            margin-bottom: 15px;
+            padding: 12px;
             background: #fff;
-            border-radius: 50px;
+            border-radius: 40px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .conectado { color: #27ae60; font-weight: bold; }
         .desconectado { color: #e74c3c; font-weight: bold; }
         
         button {
-            padding: 12px 25px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 25px;
+            border-radius: 30px;
             background: #3498db;
             color: white;
             font-weight: bold;
             cursor: pointer;
-            min-width: 120px;
+            min-width: 100px;
+            font-size: 16px; /* Tamaño mínimo para evitar zoom en iOS */
+            transition: opacity 0.2s;
+            -webkit-appearance: none; /* Quita estilo por defecto en iOS */
         }
         
-        button:hover { background: #2980b9; }
-        button:disabled { background: #bdc3c7; cursor: not-allowed; }
+        button:hover { 
+            opacity: 0.9; 
+        }
+        
+        button:active {
+            transform: scale(0.98); /* Efecto al tocar */
+        }
+        
+        button:disabled { 
+            background: #bdc3c7; 
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
         
         .registro {
             background: #fff;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             margin-bottom: 20px;
             text-align: center;
             display: none;
         }
         
         .registro input {
-            padding: 10px;
-            width: 300px;
-            margin: 0 10px;
+            padding: 15px;
+            width: 100%;
+            max-width: 300px;
+            margin: 10px 0;
             border: 2px solid #3498db;
-            border-radius: 5px;
+            border-radius: 30px;
+            font-size: 16px;
         }
         
         .juego-panel {
@@ -90,19 +112,21 @@
             display: flex;
             justify-content: space-between;
             background: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
+            font-size: 14px;
         }
         
         .badge {
             background: #3498db;
             color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 25px;
             font-weight: bold;
+            display: inline-block;
         }
         
         .badge-fallos {
@@ -121,34 +145,30 @@
         
         .tablero-container {
             flex: 2;
-            min-width: 500px;
+            min-width: 300px;
             background: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
         }
         
         /* ============================================ */
-        /* TABLERO CON COORDENADAS COMPLETAS            */
+        /* TABLERO CON COORDENADAS - VERSIÓN MÓVIL      */
         /* ============================================ */
         .tablero-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
         }
         
-        .coordenadas-superiores {
+        .coordenadas-superiores,
+        .coordenadas-inferiores {
             display: flex;
             width: 100%;
-            margin-bottom: 5px;
-            padding-left: 30px; /* Espacio para coordenadas izquierdas */
-        }
-        
-        .coordenada-superior {
-            flex: 1;
-            text-align: center;
+            padding-left: 25px; /* Espacio para coordenadas izquierdas */
+            font-size: clamp(12px, 3vw, 16px);
             font-weight: bold;
             color: #8b4513;
-            font-size: 1.1em;
         }
         
         .tablero-con-coordenadas {
@@ -156,67 +176,52 @@
             width: 100%;
         }
         
-        .coordenadas-izquierdas {
+        .coordenadas-izquierdas,
+        .coordenadas-derechas {
             display: flex;
             flex-direction: column;
-            width: 30px;
+            width: 25px;
             justify-content: space-around;
+            font-size: clamp(12px, 3vw, 16px);
+            font-weight: bold;
+            color: #8b4513;
+            text-align: center;
+        }
+        
+        .coordenadas-izquierdas {
             margin-right: 5px;
         }
         
-        .coordenada-izquierda {
+        .coordenadas-derechas {
+            margin-left: 5px;
+        }
+        
+        .coordenada-superior,
+        .coordenada-inferior {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .coordenada-izquierda,
+        .coordenada-derecha {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: #8b4513;
-            font-size: 1.1em;
         }
         
         #tablero {
             flex: 1;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
-            border: 4px solid #8b4513;
+            border: 3px solid #8b4513;
             border-radius: 8px;
             overflow: hidden;
             aspect-ratio: 1;
-        }
-        
-        .coordenadas-inferiores {
-            display: flex;
             width: 100%;
-            margin-top: 5px;
-            padding-left: 30px; /* Espacio para coordenadas izquierdas */
+            max-width: 500px;
+            margin: 0 auto;
         }
-        
-        .coordenada-inferior {
-            flex: 1;
-            text-align: center;
-            font-weight: bold;
-            color: #8b4513;
-            font-size: 1.1em;
-        }
-        
-        .coordenadas-derechas {
-            display: flex;
-            flex-direction: column;
-            width: 30px;
-            justify-content: space-around;
-            margin-left: 5px;
-        }
-        
-        .coordenada-derecha {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #8b4513;
-            font-size: 1.1em;
-        }
-        /* ============================================ */
         
         .casilla {
             aspect-ratio: 1;
@@ -225,61 +230,73 @@
             justify-content: center;
             cursor: pointer;
             position: relative;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .casilla img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 5px;
+            padding: 3px;
             pointer-events: auto;
+            max-width: 100%;
         }
         
         .casilla.blanca { background: #f0d9b5; }
         .casilla.negra { background: #b58863; }
         
+        .casilla:active {
+            opacity: 0.8;
+        }
+        
         .panel-derecho {
             flex: 1;
-            min-width: 300px;
+            min-width: 250px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
         
         .info-problema {
             background: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
         }
         
-        /* ============================================ */
-        /* TURNO AHORA ESTÁ AQUÍ - DEBAJO DE PROBLEMA  */
-        /* ============================================ */
+        .info-problema h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .info-problema p {
+            font-size: 15px;
+            line-height: 1.4;
+        }
+        
         .turno-indicador {
             background: #f39c12;
             color: white;
             padding: 12px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: 1.1em;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 12px;
         }
-        /* ============================================ */
         
         .contador-fallos {
             background: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
             text-align: center;
         }
         
         .progreso-fallos {
             width: 100%;
-            height: 20px;
+            height: 25px;
             background: #ecf0f1;
-            border-radius: 10px;
-            margin: 10px 0;
+            border-radius: 15px;
+            margin: 12px 0;
             overflow: hidden;
         }
         
@@ -291,9 +308,9 @@
         
         .chat {
             background: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
-            height: 300px;
+            height: 250px;
             display: flex;
             flex-direction: column;
         }
@@ -303,16 +320,18 @@
             overflow-y: auto;
             background: #f8f9fa;
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 10px;
             font-size: 14px;
+            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
         }
         
         .mensaje {
-            padding: 5px 10px;
+            padding: 8px 12px;
             margin: 5px 0;
             background: #e9ecef;
-            border-radius: 10px;
+            border-radius: 18px;
+            word-wrap: break-word;
         }
         
         .mensaje.sistema {
@@ -322,46 +341,182 @@
         
         .ranking {
             background: #fff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
             display: none;
+        }
+        
+        .ranking h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
         }
         
         .ranking-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px;
+            padding: 10px 8px;
             border-bottom: 1px solid #ddd;
+            font-size: 15px;
         }
         
         .botones-panel {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 15px;
             flex-wrap: wrap;
         }
         
         .btn-practica {
             background: #27ae60;
             flex: 2;
-        }
-        
-        .btn-practica:hover {
-            background: #229954;
+            min-width: 150px;
         }
         
         .btn-finalizar {
             background: #e74c3c;
             flex: 1;
+            min-width: 120px;
         }
         
-        .btn-finalizar:hover {
-            background: #c0392b;
+        /* ============================================ */
+        /* MEDIA QUERIES - AJUSTES PARA MÓVIL           */
+        /* ============================================ */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
+            .container {
+                padding: 12px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+            }
+            
+            .conexion {
+                padding: 10px;
+                gap: 8px;
+            }
+            
+            button {
+                padding: 12px 16px;
+                min-width: 90px;
+                font-size: 15px;
+            }
+            
+            .header-info {
+                font-size: 13px;
+                padding: 10px;
+            }
+            
+            .badge {
+                padding: 5px 10px;
+            }
+            
+            .tablero-container {
+                padding: 12px;
+            }
+            
+            .coordenadas-izquierdas,
+            .coordenadas-derechas {
+                width: 20px;
+                font-size: 12px;
+            }
+            
+            .coordenadas-superiores,
+            .coordenadas-inferiores {
+                padding-left: 20px;
+                font-size: 12px;
+            }
+            
+            #tablero {
+                border-width: 2px;
+            }
+            
+            .casilla img {
+                padding: 2px;
+            }
+            
+            .panel-derecho {
+                gap: 12px;
+            }
+            
+            .info-problema h3 {
+                font-size: 16px;
+            }
+            
+            .info-problema p {
+                font-size: 14px;
+            }
+            
+            .turno-indicador {
+                padding: 10px;
+                font-size: 1rem;
+            }
+            
+            .contador-fallos h4 {
+                font-size: 16px;
+            }
+            
+            .chat {
+                height: 200px;
+            }
+            
+            .botones-panel {
+                flex-direction: column;
+            }
+            
+            .btn-practica,
+            .btn-finalizar {
+                width: 100%;
+            }
         }
         
-        @media (max-width: 900px) {
-            .main-content { flex-direction: column; }
-            .tablero-container { min-width: 100%; }
+        /* Ajustes para pantallas muy pequeñas (menos de 400px) */
+        @media (max-width: 400px) {
+            .header-info {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .coordenadas-izquierdas,
+            .coordenadas-derechas {
+                width: 18px;
+                font-size: 11px;
+            }
+            
+            .coordenadas-superiores,
+            .coordenadas-inferiores {
+                padding-left: 18px;
+                font-size: 11px;
+            }
+            
+            .casilla img {
+                padding: 1px;
+            }
+            
+            .badge {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
+        /* Orientación horizontal en móvil */
+        @media (max-width: 900px) and (orientation: landscape) {
+            .main-content { 
+                flex-direction: row; 
+            }
+            
+            .tablero-container { 
+                min-width: 300px; 
+            }
+            
+            #tablero {
+                max-width: 350px;
+            }
         }
     </style>
 </head>
@@ -393,7 +548,7 @@
             
             <div class="main-content">
                 <div class="tablero-container">
-                    <!-- TABLERO CON COORDENADAS COMPLETAS -->
+                    <!-- TABLERO CON COORDENADAS -->
                     <div class="tablero-wrapper">
                         <!-- Coordenadas superiores (a-h) -->
                         <div class="coordenadas-superiores" id="coordsSuperiores">
@@ -460,7 +615,7 @@
                         <h3>Problema</h3>
                         <p id="problemaDesc">Esperando...</p>
                         
-                        <!-- TURNO AHORA VA AQUÍ (debajo de problema) -->
+                        <!-- TURNO -->
                         <div id="turnoDisplay" class="turno-indicador">⚪ Juegan blancas</div>
                     </div>
                     
